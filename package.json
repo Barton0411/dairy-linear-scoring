@@ -1,0 +1,23 @@
+{
+  "name": "dairy-linear-scoring",
+  "version": "0.1.0",
+  "description": "移动端奶牛体型外貌线性评定系统 | Dairy Linear Scoring System",
+  "main": "main.js",
+  "scripts": {
+    "dev": "echo 'Development server not configured yet'",
+    "build": "echo 'Build script not configured yet'"
+  },
+  "keywords": [
+    "dairy",
+    "cattle",
+    "scoring",
+    "linear",
+    "evaluation"
+  ],
+  "author": "bozhenwang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bozhenwang/dairy-linear-scoring"
+  }
+}
