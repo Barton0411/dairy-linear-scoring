@@ -1,0 +1,43 @@
+<!--pages/login/login.wxml-->
+<view class="container">
+  <!-- Logo区域 -->
+  <view class="logo-section">
+    <image class="logo" src="/assets/icons/logo.png" mode="aspectFit"></image>
+    <text class="app-name">奶牛线性评定</text>
+    <text class="app-desc">专业的奶牛体型评分工具</text>
+  </view>
+
+  <!-- 登录按钮区域 -->
+  <view class="login-section">
+    <button
+      class="login-btn"
+      open-type="{{agreed ? '' : ''}}"
+      bindtap="onWxLogin"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      <text class="btn-icon">W</text>
+      <text class="btn-text">微信一键登录</text>
+    </button>
+
+    <!-- 协议 -->
+    <view class="agreement">
+      <checkbox-group bindchange="onAgreeChange">
+        <label class="agreement-label">
+          <checkbox value="agreed" checked="{{agreed}}" color="#07C160" />
+          <text class="agreement-text">
+            我已阅读并同意
+            <text class="link" bindtap="onViewAgreement">《用户协议》</text>
+            和
+            <text class="link" bindtap="onViewPrivacy">《隐私政策》</text>
+          </text>
+        </label>
+      </checkbox-group>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="footer">
+    <text class="footer-text">首次登录将自动创建账号</text>
+  </view>
+</view>

@@ -1,0 +1,52 @@
+<!--pages/scoring/info/info.wxml-->
+<view class="container">
+  <view class="card">
+    <view class="card-title">牛只信息</view>
+
+    <view class="form-group">
+      <text class="form-label">当前牧场</text>
+      <view class="farm-info">
+        <text class="farm-name">{{currentFarm.name}}</text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">评分模式</text>
+      <view class="mode-info">
+        <text class="mode-name {{mode === 'normal' ? 'normal' : 'defect'}}">
+          {{mode === 'normal' ? '正常模式' : '缺陷模式'}}
+        </text>
+        <text class="mode-desc">
+          {{mode === 'normal' ? '逐一评定所有性状' : '仅评异常性状，其他默认分'}}
+        </text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">牛号（耳号）</text>
+      <view class="input-wrapper">
+        <input
+          class="form-input"
+          placeholder="请输入牛号"
+          value="{{earTag}}"
+          bindinput="onEarTagInput"
+          confirm-type="done"
+        />
+        <view class="scan-btn" bindtap="onScanEarTag">
+          <text class="scan-icon">S</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-area safe-bottom">
+    <button
+      class="btn-primary btn-block"
+      bindtap="onStartScoring"
+      loading="{{loading}}"
+      disabled="{{loading || !earTag}}"
+    >
+      开始评分
+    </button>
+  </view>
+</view>

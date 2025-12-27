@@ -1,0 +1,51 @@
+<!--pages/scoring/photo/photo.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">拍照记录</text>
+    <text class="subtitle">可拍摄{{maxPhotos}}张照片记录牛只体型</text>
+  </view>
+
+  <!-- 照片列表 -->
+  <view class="photo-grid">
+    <!-- 已拍照片 -->
+    <view
+      class="photo-item"
+      wx:for="{{currentScoring.photos}}"
+      wx:key="localId"
+    >
+      <image
+        class="photo-img"
+        src="{{item.localPath}}"
+        mode="aspectFill"
+        data-index="{{index}}"
+        bindtap="onPreviewPhoto"
+      />
+      <view class="photo-delete" data-index="{{index}}" catchtap="onDeletePhoto">
+        <text>X</text>
+      </view>
+    </view>
+
+    <!-- 添加按钮 -->
+    <view class="add-photo" wx:if="{{currentScoring.photos.length < maxPhotos}}">
+      <view class="add-btn camera" bindtap="onTakePhoto">
+        <text class="add-icon">C</text>
+        <text class="add-text">拍照</text>
+      </view>
+      <view class="add-btn album" bindtap="onChooseFromAlbum">
+        <text class="add-icon">A</text>
+        <text class="add-text">相册</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 照片计数 -->
+  <view class="photo-count">
+    <text>已拍 {{currentScoring.photos.length}}/{{maxPhotos}} 张</text>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer safe-bottom">
+    <button class="btn-secondary" bindtap="onSkip">跳过</button>
+    <button class="btn-primary" bindtap="onComplete">完成</button>
+  </view>
+</view>

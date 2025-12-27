@@ -1,0 +1,86 @@
+<!--pages/scoring/result/result.wxml-->
+<view class="container">
+  <!-- 评分结果 -->
+  <view class="result-card">
+    <view class="result-header">
+      <text class="ear-tag">牛号: {{currentScoring.earTag}}</text>
+      <text class="mode-tag {{currentScoring.mode}}">
+        {{currentScoring.mode === 'normal' ? '正常模式' : '缺陷模式'}}
+      </text>
+    </view>
+
+    <view class="score-display">
+      <view class="total-score">
+        <text class="score-number">{{totalScore.score}}</text>
+        <text class="score-label">总分</text>
+      </view>
+      <view class="grade-display">
+        <text class="grade-text">{{totalScore.grade}}</text>
+        <text class="grade-label">等级</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 各类别评分详情 -->
+  <view class="detail-section">
+    <text class="section-title">评分详情</text>
+
+    <view class="category-card" wx:for="{{categories}}" wx:key="key">
+      <view class="category-header">
+        <text class="category-name">{{item.name}}</text>
+        <text class="category-weight">(权重 {{item.weight * 100}}%)</text>
+      </view>
+
+      <view class="trait-scores">
+        <view class="trait-score" wx:for="{{item.traits}}" wx:key="key" wx:for-item="trait">
+          <text class="trait-name">{{trait.name}}</text>
+          <text class="trait-value">{{currentScoring.scores[trait.key]}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 照片预览 -->
+  <view class="photo-section" wx:if="{{currentScoring.photos.length > 0}}">
+    <text class="section-title">照片 ({{currentScoring.photos.length}}张)</text>
+    <scroll-view class="photo-scroll" scroll-x>
+      <image
+        class="photo-thumb"
+        wx:for="{{currentScoring.photos}}"
+        wx:key="localId"
+        src="{{item.localPath}}"
+        mode="aspectFill"
+      />
+    </scroll-view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-section safe-bottom">
+    <block wx:if="{{!submitted}}">
+      <button
+        class="btn-primary btn-block"
+        bindtap="onSubmit"
+        loading="{{submitting}}"
+        disabled="{{submitting}}"
+      >
+        提交评分
+      </button>
+    </block>
+
+    <block wx:else>
+      <view class="success-message">
+        <text class="success-icon">OK</text>
+        <text class="success-text">评分已提交</text>
+      </view>
+
+      <view class="action-buttons">
+        <button class="btn-secondary" bindtap="onBackHome">返回首页</button>
+        <button class="btn-primary" bindtap="onContinue">继续评分</button>
+      </view>
+
+      <view class="view-records" bindtap="onViewRecords">
+        <text>查看评分记录</text>
+      </view>
+    </block>
+  </view>
+</view>

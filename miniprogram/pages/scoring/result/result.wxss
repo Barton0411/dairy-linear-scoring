@@ -1,0 +1,217 @@
+/* pages/scoring/result/result.wxss */
+
+.container {
+  padding: 30rpx;
+  padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
+}
+
+/* 结果卡片 */
+.result-card {
+  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  color: #fff;
+  margin-bottom: 30rpx;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.ear-tag {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.mode-tag {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.score-display {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.total-score, .grade-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-number {
+  font-size: 96rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.grade-text {
+  font-size: 72rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.score-label, .grade-label {
+  font-size: 26rpx;
+  opacity: 0.8;
+  margin-top: 12rpx;
+}
+
+/* 详情区域 */
+.detail-section {
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.category-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.category-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.category-weight {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 12rpx;
+}
+
+.trait-scores {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.trait-score {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  padding: 8rpx 0;
+  box-sizing: border-box;
+}
+
+.trait-score:nth-child(odd) {
+  padding-right: 20rpx;
+}
+
+.trait-score:nth-child(even) {
+  padding-left: 20rpx;
+}
+
+.trait-name {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.trait-value {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #07C160;
+}
+
+/* 照片区域 */
+.photo-section {
+  margin-bottom: 30rpx;
+}
+
+.photo-scroll {
+  white-space: nowrap;
+}
+
+.photo-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  margin-right: 16rpx;
+  display: inline-block;
+}
+
+/* 操作区域 */
+.action-section {
+  padding-top: 20rpx;
+}
+
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx;
+}
+
+.success-icon {
+  width: 100rpx;
+  height: 100rpx;
+  background: #07C160;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.success-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-buttons .btn-secondary,
+.action-buttons .btn-primary {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  color: #fff;
+}
+
+.view-records {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.view-records text {
+  font-size: 28rpx;
+  color: #07C160;
+}
