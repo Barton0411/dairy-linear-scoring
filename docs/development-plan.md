@@ -173,40 +173,34 @@ Excel导出包含以下字段：
 
 ### 2.3 数据库设计
 
-#### 用户表 (users)
+#### 鉴定员-牧场关联表 (appraiser_farms)
+```sql
+CREATE TABLE appraiser_farms (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  employee_id VARCHAR(32) NOT NULL,     -- 鉴定员工号
+  appraiser_name VARCHAR(64) NOT NULL,  -- 鉴定员姓名
+  is_certified TINYINT DEFAULT 0,       -- 是否经过认证 (1=已认证, 0=未认证)
+  farm_code VARCHAR(32) NOT NULL,       -- 牧场编号
+  farm_name VARCHAR(100) NOT NULL,      -- 牧场名称
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_employee (employee_id),
+  INDEX idx_farm (farm_code)
+);
+```
+
+#### 用户表 (users) - 存储微信登录信息
 ```sql
 CREATE TABLE users (
   id INT PRIMARY KEY AUTO_INCREMENT,
   openid VARCHAR(64) UNIQUE NOT NULL,
-  nickname VARCHAR(64),
+  employee_id VARCHAR(32),              -- 关联鉴定员工号
+  appraiser_name VARCHAR(64),           -- 鉴定员姓名
+  is_certified TINYINT DEFAULT 0,       -- 是否认证
   avatar_url VARCHAR(255),
-  phone VARCHAR(20),
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-
-#### 牧场表 (farms)
-```sql
-CREATE TABLE farms (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL,
-  location VARCHAR(255),
-  contact VARCHAR(64),
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-#### 用户-牧场关联表 (user_farms)
-```sql
-CREATE TABLE user_farms (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  user_id INT NOT NULL,
-  farm_id INT NOT NULL,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY (user_id, farm_id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (farm_id) REFERENCES farms(id)
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_employee (employee_id)
 );
 ```
 
@@ -214,11 +208,11 @@ CREATE TABLE user_farms (
 ```sql
 CREATE TABLE cattle (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  ear_tag VARCHAR(32) NOT NULL,
-  farm_id INT NOT NULL,
+  ear_tag VARCHAR(32) NOT NULL,         -- 牛号/耳号
+  farm_code VARCHAR(32) NOT NULL,       -- 牧场编号
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY (ear_tag, farm_id),
-  FOREIGN KEY (farm_id) REFERENCES farms(id)
+  UNIQUE KEY (ear_tag, farm_code),
+  INDEX idx_farm (farm_code)
 );
 ```
 
@@ -226,54 +220,58 @@ CREATE TABLE cattle (
 ```sql
 CREATE TABLE scores (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  cattle_id INT NOT NULL,
-  user_id INT NOT NULL,
-  farm_id INT NOT NULL,
+  local_id VARCHAR(64),                 -- 客户端生成的本地ID，用于离线同步
+  ear_tag VARCHAR(32) NOT NULL,         -- 牛号
+  farm_code VARCHAR(32) NOT NULL,       -- 牧场编号
+  farm_name VARCHAR(100),               -- 牧场名称
+  user_id INT NOT NULL,                 -- 评分用户ID
+  employee_id VARCHAR(32),              -- 鉴定员工号
+  appraiser_name VARCHAR(64),           -- 鉴定员姓名
+  is_certified TINYINT DEFAULT 0,       -- 鉴定员是否认证
   score_mode ENUM('normal', 'defect') DEFAULT 'normal',
 
   -- 体躯容量 (18%)
-  tg TINYINT DEFAULT 5,   -- 体高
-  xk TINYINT DEFAULT 5,   -- 胸宽
-  ts TINYINT DEFAULT 5,   -- 体深
-  yqd TINYINT DEFAULT 5,  -- 腰强度
+  tg TINYINT NOT NULL,   -- 体高
+  xk TINYINT NOT NULL,   -- 胸宽
+  ts TINYINT NOT NULL,   -- 体深
+  yqd TINYINT NOT NULL,  -- 腰强度
 
   -- 尻部 (10%)
-  kjd TINYINT DEFAULT 5,  -- 尻角度
-  kk TINYINT DEFAULT 5,   -- 尻宽
+  kjd TINYINT NOT NULL,  -- 尻角度
+  kk TINYINT NOT NULL,   -- 尻宽
 
-  -- 肢蹄 (20%)
-  tjd TINYINT DEFAULT 5,  -- 蹄角度
-  tzs TINYINT DEFAULT 5,  -- 蹄踵深度
-  gzd TINYINT DEFAULT 5,  -- 骨质地
-  hzcs TINYINT DEFAULT 5, -- 后肢侧视
-  hzhs TINYINT DEFAULT 5, -- 后肢后视
+  -- 肢蹄 (26%)
+  tjd TINYINT NOT NULL,  -- 蹄角度
+  tgsd TINYINT NOT NULL, -- 蹄踵深度
+  gzd TINYINT NOT NULL,  -- 骨质地
+  hzcs TINYINT NOT NULL, -- 后肢侧视
+  hzhs TINYINT NOT NULL, -- 后肢后视
 
-  -- 泌乳系统 (42%)
-  rfsd TINYINT DEFAULT 5,  -- 乳房深度
-  zxrd TINYINT DEFAULT 5,  -- 中央悬韧带
-  qrffz TINYINT DEFAULT 5, -- 前乳房附着
-  qrtwz TINYINT DEFAULT 5, -- 前乳头位置
-  qrtcd TINYINT DEFAULT 5, -- 前乳头长度
-  hrfgd TINYINT DEFAULT 5, -- 后乳房附着高度
-  hrfkd TINYINT DEFAULT 5, -- 后乳房附着宽度
-  hrtwz TINYINT DEFAULT 5, -- 后乳头位置
+  -- 泌乳系统 (32%)
+  rfsd TINYINT NOT NULL,  -- 乳房深度
+  zyxrd TINYINT NOT NULL, -- 中央悬韧带
+  qrffz TINYINT NOT NULL, -- 前乳房附着
+  qrtwz TINYINT NOT NULL, -- 前乳头位置
+  qrtcd TINYINT NOT NULL, -- 前乳头长度
+  hrffzgd TINYINT NOT NULL, -- 后乳房附着高度
+  hrffzkd TINYINT NOT NULL, -- 后乳房附着宽度
+  hrtwz TINYINT NOT NULL, -- 后乳头位置
 
-  -- 乳用特征 (10%)
-  ljx TINYINT DEFAULT 5,   -- 棱角性
+  -- 乳用特征 (14%)
+  ljx TINYINT NOT NULL,   -- 棱角性
 
   -- 计算结果
-  total_score DECIMAL(5,2),
-  grade ENUM('Ex', 'VG', 'GP', 'G', 'F', 'P'),
+  total_score DECIMAL(5,2) NOT NULL,
+  grade ENUM('Ex', 'VG', 'GP', 'G', 'F', 'P') NOT NULL,
 
   -- 元数据
-  sync_status ENUM('pending', 'synced') DEFAULT 'pending',
+  sync_status ENUM('pending', 'synced') DEFAULT 'synced',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-  FOREIGN KEY (cattle_id) REFERENCES cattle(id),
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (farm_id) REFERENCES farms(id),
-  INDEX idx_farm_created (farm_id, created_at)
+  INDEX idx_farm_created (farm_code, created_at),
+  INDEX idx_local_id (local_id)
 );
 ```
 
@@ -283,9 +281,9 @@ CREATE TABLE photos (
   id INT PRIMARY KEY AUTO_INCREMENT,
   score_id INT NOT NULL,
   user_id INT NOT NULL,
-  oss_key VARCHAR(255) NOT NULL,
-  oss_url VARCHAR(500),
-  sync_status ENUM('pending', 'synced') DEFAULT 'pending',
+  oss_key VARCHAR(255) NOT NULL,        -- OSS对象键
+  oss_url VARCHAR(500),                 -- OSS访问URL
+  sync_status ENUM('pending', 'synced') DEFAULT 'synced',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (score_id) REFERENCES scores(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users(id)
@@ -296,16 +294,17 @@ CREATE TABLE photos (
 
 | 接口 | 方法 | 描述 | 权限 |
 |------|------|------|------|
-| /api/auth/login | POST | 微信登录 | 公开 |
+| /api/auth/login | POST | 微信登录，获取openId | 公开 |
+| /api/auth/verify | POST | 鉴定员身份认证（姓名+工号） | 公开 |
 | /api/user/info | GET | 获取用户信息 | 登录 |
 | /api/farms | GET | 获取用户关联的牧场列表 | 登录 |
-| /api/farms/:id/cattle | GET/POST | 牛只列表/新增 | 登录 |
-| /api/farms/:id/scores | GET | 获取牧场所有评分记录 | 登录 |
+| /api/farms/:code/cattle | GET/POST | 牛只列表/新增 | 登录 |
+| /api/farms/:code/scores | GET | 获取牧场所有评分记录 | 登录 |
 | /api/scores | POST | 提交评分 | 登录 |
 | /api/scores/:id | GET | 评分详情 | 登录 |
 | /api/scores/:id | PUT/DELETE | 修改/删除评分 | 仅创建者 |
 | /api/photos/upload | POST | 上传照片到OSS | 登录 |
-| /api/farms/:id/export | POST | 导出牧场数据 | 登录 |
+| /api/farms/:code/export | POST | 导出牧场数据 | 登录 |
 | /api/sync | POST | 离线数据同步 | 登录 |
 
 ### 2.5 照片上传策略
@@ -424,13 +423,19 @@ pages/
 |------|------|
 | 产品形态 | 微信小程序 + 管理后台（Web） |
 | 用户体系 | 鉴定员可服务多个牧场，需选择当前牧场 |
-| 牧场管理 | 管理员后台添加牧场，鉴定员通过牧场编号加入 |
+| 鉴定员认证 | 微信登录后需输入姓名+工号，匹配 appraiser_farms 表验证身份 |
+| 认证状态显示 | 首页、评分记录、导出数据中显示鉴定员是否认证 |
+| 牧场管理 | 通过 appraiser_farms 表配置鉴定员与牧场的关联 |
 | 数据归属 | 数据归属牧场 |
 | 权限控制 | 可查看/导出牧场所有数据，仅能编辑/删除自己的数据 |
+| 默认分设置 | 各性状单独设置默认分（不区分正常/缺陷模式） |
+| 分数验证 | 提交前验证所有20个性状都有分数，不能为空 |
+| 结果页按钮 | 所有按钮（继续评分/返回首页/查看记录）都先提交评分 |
+| 性状示意图 | 点击性状名称显示PDF中的评分示意图 |
 | 数据库 | 阿里云 PolarDB |
 | 图片存储 | 阿里云 OSS，压缩后上传，永久保存，不可删除 |
 | 上传策略 | 有网自动上传，离线暂存后批量上传，后台静默处理 |
-| 导出字段 | 牧场编号/名称 + 牛号 + 各性状得分 + 评级 + 时间 + 鉴定员 |
+| 导出字段 | 牧场编号/名称 + 牛号 + 各性状得分 + 评级 + 时间 + 鉴定员姓名 + 认证状态 |
 | 上线方式 | 直接公开发布 |
 | UI设计 | 微信小程序标准风格 |
 | 扩展性 | 预留 API 对接其他数据平台 |
