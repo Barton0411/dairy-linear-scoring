@@ -83,6 +83,15 @@ const api = {
     })
   },
 
+  // 鉴定员身份认证
+  verifyAppraiser(data) {
+    return request({
+      url: '/api/auth/verify',
+      method: 'POST',
+      data
+    })
+  },
+
   getUserInfo() {
     return request({ url: '/api/user/info' })
   },

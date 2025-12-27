@@ -133,10 +133,15 @@ const store = observable({
     startTime: null
   },
 
-  // 设置
+  // 设置 - 各性状单独设置默认分
   settings: {
-    defaultScore: 5,
-    defectDefaultScore: 6,
+    defaultScores: {
+      tg: 5, xk: 5, ts: 5, yqd: 5,           // 体躯容量
+      kjd: 5, kk: 5,                          // 尻部
+      tjd: 5, tgsd: 5, gzd: 5, hzcs: 5, hzhs: 5, // 肢蹄
+      rfsd: 5, zyxrd: 5, qrffz: 5, qrtwz: 5, qrtcd: 5, hrffzgd: 5, hrffzkd: 5, hrtwz: 5, // 泌乳系统
+      ljx: 5                                   // 乳用特征
+    },
     photoPromptExcellent: false,
     photoPromptPoor: true,
     maxPhotos: 5
@@ -176,11 +181,12 @@ const store = observable({
 
   // 评分相关
   startNewScoring: action(function(earTag, mode = 'normal') {
-    const defaultValue = mode === 'defect' ? this.settings.defectDefaultScore : this.settings.defaultScore
+    // 使用各性状的独立默认分
+    const scores = { ...this.settings.defaultScores }
     this.currentScoring = {
       earTag,
       mode,
-      scores: getDefaultScores(defaultValue),
+      scores,
       photos: [],
       startTime: Date.now()
     }

@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/login/login",
+    "pages/login/verify/verify",
     "pages/farm-select/farm-select",
     "pages/scoring/info/info",
     "pages/scoring/normal/normal",

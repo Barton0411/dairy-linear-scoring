@@ -31,14 +31,15 @@ Page({
   // 获取等级名称
   getGradeName,
 
-  // 提交评分
-  async onSubmit() {
+  // 提交并继续评分
+  async onSubmitAndContinue() {
     if (this.data.submitting) return
 
     this.setData({ submitting: true })
     showLoading('提交中...')
 
     const { currentScoring, currentFarm, userInfo, totalScore } = this.data
+    const currentMode = currentScoring.mode
 
     // 构建评分数据
     const scoreData = {
@@ -68,7 +69,6 @@ Page({
             await api.uploadPhoto(photo.localPath, scoreData.localId)
           } catch (err) {
             console.error('Photo upload failed:', err)
-            // 照片上传失败，保存到离线队列
             this.saveOfflinePhoto(photo, scoreData.localId)
           }
         }
@@ -82,8 +82,11 @@ Page({
         showSuccess('已保存，联网后自动同步')
       }
 
-      this.setData({ submitted: true })
       this.updatePendingSyncCount()
+
+      // 重置并跳转到继续评分
+      this.resetScoring()
+      wx.redirectTo({ url: `/pages/scoring/info/info?mode=${currentMode}` })
 
     } catch (err) {
       hideLoading()
@@ -92,8 +95,9 @@ Page({
       if (err.message.includes('网络')) {
         this.saveOfflineScore(scoreData)
         showSuccess('已保存，联网后自动同步')
-        this.setData({ submitted: true })
         this.updatePendingSyncCount()
+        this.resetScoring()
+        wx.redirectTo({ url: `/pages/scoring/info/info?mode=${currentMode}` })
       } else {
         showError(err.message || '提交失败')
       }

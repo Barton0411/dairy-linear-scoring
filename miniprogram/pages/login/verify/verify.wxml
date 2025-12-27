@@ -1,0 +1,45 @@
+<!--pages/login/verify/verify.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">身份认证</text>
+    <text class="subtitle">请输入您的姓名和工号进行认证</text>
+  </view>
+
+  <view class="form-section">
+    <view class="form-group">
+      <text class="form-label">姓名</text>
+      <input
+        class="form-input"
+        placeholder="请输入真实姓名"
+        value="{{name}}"
+        bindinput="onNameInput"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">工号</text>
+      <input
+        class="form-input"
+        placeholder="请输入鉴定员工号"
+        value="{{employeeId}}"
+        bindinput="onEmployeeIdInput"
+      />
+    </view>
+  </view>
+
+  <view class="tips">
+    <text class="tips-text">* 姓名和工号需与系统登记信息一致</text>
+    <text class="tips-text">* 如有问题请联系管理员</text>
+  </view>
+
+  <view class="action-section safe-bottom">
+    <button
+      class="btn-primary btn-block"
+      bindtap="onVerify"
+      loading="{{loading}}"
+      disabled="{{loading || !name || !employeeId}}"
+    >
+      确认认证
+    </button>
+  </view>
+</view>

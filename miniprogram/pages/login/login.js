@@ -38,20 +38,26 @@ Page({
       // 获取微信登录code
       const loginRes = await this.wxLogin()
 
-      // 调用后端登录接口
+      // 调用后端获取openId
       const result = await api.login(loginRes.code)
-
-      // 保存token和用户信息
-      wx.setStorageSync('token', result.token)
-      wx.setStorageSync('userInfo', result.user)
-
-      // 更新store
-      store.setUserInfo(result.user)
 
       hideLoading()
 
-      // 跳转到首页
-      wx.switchTab({ url: '/pages/index/index' })
+      if (result.isNewUser || !result.verified) {
+        // 新用户或未认证用户，跳转到身份认证页
+        wx.setStorageSync('tempWxUserInfo', {
+          openId: result.openId,
+          sessionKey: result.sessionKey
+        })
+        wx.navigateTo({ url: '/pages/login/verify/verify' })
+      } else {
+        // 已认证用户，直接登录
+        wx.setStorageSync('token', result.token)
+        wx.setStorageSync('userInfo', result.user)
+        store.setUserInfo(result.user)
+        store.setFarms(result.farms || [])
+        wx.switchTab({ url: '/pages/index/index' })
+      }
 
     } catch (err) {
       hideLoading()
