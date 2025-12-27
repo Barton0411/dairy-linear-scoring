@@ -23,6 +23,7 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+*.pem
 
 # Build files
 build/
