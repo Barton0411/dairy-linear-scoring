@@ -41,7 +41,7 @@
 |------|------|----------|
 | 微信登录 | 微信授权登录 | 获取用户信息，生成唯一ID |
 | 牧场选择 | 选择当前工作牧场 | 切换牧场后数据范围随之变化 |
-| 牛只信息录入 | 耳号、胎次、泌乳天数 | 必填校验，同牧场耳号唯一性检查 |
+| 牛只信息录入 | 牛号（耳号） | 必填校验，同牧场牛号唯一性检查 |
 | 正常模式评分 | 20个性状1-9分评分 | 滑块/按钮选择，默认值5分 |
 | 评分计算 | 按权重计算总分 | 实时显示总分和等级 |
 | 拍照功能 | 拍照并关联评分记录 | 支持多张，压缩后上传OSS |
@@ -72,7 +72,7 @@ Excel导出包含以下字段：
 | 字段分类 | 字段列表 |
 |----------|----------|
 | 牧场信息 | 牧场编号、牧场名称 |
-| 牛只信息 | 牛号（耳号）、胎次、泌乳天数 |
+| 牛只信息 | 牛号（耳号） |
 | 体躯容量 | 体高、胸宽、体深、腰强度 |
 | 尻部 | 尻角度、尻宽 |
 | 肢蹄 | 蹄角度、蹄踵深度、骨质地、后肢侧视、后肢后视 |
@@ -216,7 +216,6 @@ CREATE TABLE cattle (
   id INT PRIMARY KEY AUTO_INCREMENT,
   ear_tag VARCHAR(32) NOT NULL,
   farm_id INT NOT NULL,
-  parity INT DEFAULT 1,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY (ear_tag, farm_id),
   FOREIGN KEY (farm_id) REFERENCES farms(id)
@@ -231,7 +230,6 @@ CREATE TABLE scores (
   user_id INT NOT NULL,
   farm_id INT NOT NULL,
   score_mode ENUM('normal', 'defect') DEFAULT 'normal',
-  lactation_days INT,
 
   -- 体躯容量 (18%)
   tg TINYINT DEFAULT 5,   -- 体高
