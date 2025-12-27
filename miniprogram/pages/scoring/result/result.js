@@ -1,8 +1,8 @@
 // pages/scoring/result/result.js
 const { storeBindingsBehavior } = require('mobx-miniprogram-binding')
-const { store, TRAITS, calculateTotalScore } = require('../../../store/index')
+const { store, TRAITS, ALL_TRAITS, calculateTotalScore } = require('../../../store/index')
 const { api } = require('../../../utils/request')
-const { showLoading, hideLoading, showSuccess, showError, checkNetwork, generateLocalId, getGradeName } = require('../../../utils/util')
+const { showLoading, hideLoading, showSuccess, showError, showToast, checkNetwork, generateLocalId, getGradeName } = require('../../../utils/util')
 
 Page({
   behaviors: [storeBindingsBehavior],
@@ -18,8 +18,7 @@ Page({
       key,
       ...val
     })),
-    submitting: false,
-    submitted: false
+    submitting: false
   },
 
   onLoad() {
@@ -31,15 +30,34 @@ Page({
   // 获取等级名称
   getGradeName,
 
-  // 提交并继续评分
-  async onSubmitAndContinue() {
-    if (this.data.submitting) return
+  // 验证所有性状都有分数
+  validateScores() {
+    const { scores } = this.data.currentScoring
+    const missingTraits = []
 
-    this.setData({ submitting: true })
-    showLoading('提交中...')
+    for (const trait of ALL_TRAITS) {
+      const score = scores[trait.key]
+      if (score === undefined || score === null || score === '') {
+        missingTraits.push(trait.name)
+      }
+    }
+
+    if (missingTraits.length > 0) {
+      showToast(`${missingTraits[0]}未评分`)
+      return false
+    }
+
+    return true
+  },
+
+  // 提交评分（核心方法）
+  async submitScore() {
+    // 验证分数完整性
+    if (!this.validateScores()) {
+      return false
+    }
 
     const { currentScoring, currentFarm, userInfo, totalScore } = this.data
-    const currentMode = currentScoring.mode
 
     // 构建评分数据
     const scoreData = {
@@ -72,35 +90,94 @@ Page({
             this.saveOfflinePhoto(photo, scoreData.localId)
           }
         }
-
-        hideLoading()
-        showSuccess('提交成功')
       } else {
         // 离线保存
         this.saveOfflineScore(scoreData)
-        hideLoading()
-        showSuccess('已保存，联网后自动同步')
       }
 
       this.updatePendingSyncCount()
-
-      // 重置并跳转到继续评分
-      this.resetScoring()
-      wx.redirectTo({ url: `/pages/scoring/info/info?mode=${currentMode}` })
+      return true
 
     } catch (err) {
-      hideLoading()
-
       // 网络错误时保存到离线
       if (err.message.includes('网络')) {
         this.saveOfflineScore(scoreData)
-        showSuccess('已保存，联网后自动同步')
         this.updatePendingSyncCount()
+        return true
+      } else {
+        throw err
+      }
+    }
+  },
+
+  // 提交并继续评分
+  async onSubmitAndContinue() {
+    if (this.data.submitting) return
+
+    this.setData({ submitting: true })
+    showLoading('提交中...')
+
+    try {
+      const success = await this.submitScore()
+      hideLoading()
+
+      if (success) {
+        showSuccess('提交成功')
+        const currentMode = this.data.currentScoring.mode
         this.resetScoring()
         wx.redirectTo({ url: `/pages/scoring/info/info?mode=${currentMode}` })
-      } else {
-        showError(err.message || '提交失败')
       }
+    } catch (err) {
+      hideLoading()
+      showError(err.message || '提交失败')
+    } finally {
+      this.setData({ submitting: false })
+    }
+  },
+
+  // 返回首页（先提交）
+  async onBackHome() {
+    if (this.data.submitting) return
+
+    this.setData({ submitting: true })
+    showLoading('提交中...')
+
+    try {
+      const success = await this.submitScore()
+      hideLoading()
+
+      if (success) {
+        showSuccess('提交成功')
+        this.resetScoring()
+        wx.switchTab({ url: '/pages/index/index' })
+      }
+    } catch (err) {
+      hideLoading()
+      showError(err.message || '提交失败')
+    } finally {
+      this.setData({ submitting: false })
+    }
+  },
+
+  // 查看记录列表（先提交）
+  async onViewRecords() {
+    if (this.data.submitting) return
+
+    this.setData({ submitting: true })
+    showLoading('提交中...')
+
+    try {
+      const success = await this.submitScore()
+      hideLoading()
+
+      if (success) {
+        showSuccess('提交成功')
+        this.resetScoring()
+        wx.switchTab({ url: '/pages/records/list/list' })
+      }
+    } catch (err) {
+      hideLoading()
+      showError(err.message || '提交失败')
     } finally {
       this.setData({ submitting: false })
     }
@@ -121,23 +198,5 @@ Page({
       scoreId
     })
     wx.setStorageSync('offlinePhotos', offlinePhotos)
-  },
-
-  // 继续评下一头
-  onContinue() {
-    this.resetScoring()
-    wx.redirectTo({ url: `/pages/scoring/info/info?mode=${this.data.currentScoring.mode}` })
-  },
-
-  // 返回首页
-  onBackHome() {
-    this.resetScoring()
-    wx.switchTab({ url: '/pages/index/index' })
-  },
-
-  // 查看记录列表
-  onViewRecords() {
-    this.resetScoring()
-    wx.switchTab({ url: '/pages/records/list/list' })
   }
 })
