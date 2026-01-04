@@ -1,4 +1,5 @@
 <!--pages/scoring/photo/photo.wxml-->
+<nav-header title="拍照记录" />
 <view class="container">
   <view class="header">
     <text class="title">拍照记录</text>
@@ -7,40 +8,36 @@
 
   <!-- 照片列表 -->
   <view class="photo-grid">
-    <!-- 已拍照片 -->
-    <view
-      class="photo-item"
-      wx:for="{{currentScoring.photos}}"
-      wx:key="localId"
-    >
+    <view class="grid-item" wx:for="{{gridItems}}" wx:key="id">
       <image
+        wx:if="{{item.type === 'photo'}}"
         class="photo-img"
-        src="{{item.localPath}}"
+        src="{{item.path}}"
         mode="aspectFill"
-        data-index="{{index}}"
+        data-index="{{item.photoIndex}}"
         bindtap="onPreviewPhoto"
       />
-      <view class="photo-delete" data-index="{{index}}" catchtap="onDeletePhoto">
-        <text>X</text>
+      <view
+        wx:if="{{item.type === 'photo'}}"
+        class="photo-delete"
+        data-index="{{item.photoIndex}}"
+        catchtap="onDeletePhoto"
+      >
+        <text>×</text>
       </view>
-    </view>
 
-    <!-- 添加按钮 -->
-    <view class="add-photo" wx:if="{{currentScoring.photos.length < maxPhotos}}">
-      <view class="add-btn camera" bindtap="onTakePhoto">
-        <text class="add-icon">C</text>
-        <text class="add-text">拍照</text>
+      <view wx:elif="{{item.type === 'add'}}" class="add-cell" bindtap="onAddPhoto">
+        <text class="add-plus">＋</text>
+        <text class="add-hint">拍照/相册</text>
       </view>
-      <view class="add-btn album" bindtap="onChooseFromAlbum">
-        <text class="add-icon">A</text>
-        <text class="add-text">相册</text>
-      </view>
+
+      <view wx:else class="empty-cell" />
     </view>
   </view>
 
   <!-- 照片计数 -->
   <view class="photo-count">
-    <text>已拍 {{currentScoring.photos.length}}/{{maxPhotos}} 张</text>
+    <text>已拍 {{photoCount}}/{{maxPhotos}} 张</text>
   </view>
 
   <!-- 底部按钮 -->

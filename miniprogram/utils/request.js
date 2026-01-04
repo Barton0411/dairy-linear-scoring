@@ -2,6 +2,21 @@
 
 const app = getApp()
 
+// 将对象转换为 query string
+function buildQueryString(params) {
+  if (!params || Object.keys(params).length === 0) {
+    return ''
+  }
+
+  const parts = []
+  for (const key in params) {
+    if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
+      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    }
+  }
+  return parts.join('&')
+}
+
 // 请求拦截器
 function request(options) {
   return new Promise((resolve, reject) => {
@@ -29,7 +44,9 @@ function request(options) {
           app.handleTokenExpired()
           reject(new Error('登录已过期，请重新登录'))
         } else {
-          reject(new Error(res.data?.message || `请求失败: ${res.statusCode}`))
+          // 尝试获取错误消息，支持 error 和 message 两种字段
+          const errorMsg = res.data?.error || res.data?.message || `请求失败: ${res.statusCode}`
+          reject(new Error(errorMsg))
         }
       },
       fail: (err) => {
@@ -126,7 +143,7 @@ const api = {
 
   // 牛只相关
   getCattle(farmId, params = {}) {
-    const query = new URLSearchParams(params).toString()
+    const query = buildQueryString(params)
     return request({
       url: `/api/farms/${farmId}/cattle${query ? '?' + query : ''}`
     })
@@ -142,7 +159,7 @@ const api = {
 
   // 评分相关
   getScores(farmId, params = {}) {
-    const query = new URLSearchParams(params).toString()
+    const query = buildQueryString(params)
     return request({
       url: `/api/farms/${farmId}/scores${query ? '?' + query : ''}`
     })
@@ -201,6 +218,159 @@ const api = {
       method: 'POST',
       data: params
     })
+  },
+
+  // 检查当天是否已有评分
+  checkTodayScore(farmCode, earTag) {
+    return request({
+      url: `/api/scores/check-today/${farmCode}/${earTag}`
+    })
+  },
+
+  // 鉴定员管理
+  getAppraisers() {
+    return request({ url: '/api/appraisers' })
+  },
+
+  createAppraiser(data) {
+    return request({
+      url: '/api/appraisers',
+      method: 'POST',
+      data
+    })
+  },
+
+  updateAppraiser(employeeId, data) {
+    return request({
+      url: `/api/appraisers/${employeeId}`,
+      method: 'PUT',
+      data
+    })
+  },
+
+  deleteAppraiser(employeeId, params = {}) {
+    // 构建query参数
+    let url = `/api/appraisers/${employeeId}`
+    const queryParams = []
+
+    if (params.transferTo) {
+      queryParams.push(`transferTo=${params.transferTo}`)
+    }
+
+    if (params.keepRecords) {
+      queryParams.push('keepRecords=true')
+    }
+
+    if (queryParams.length > 0) {
+      url += '?' + queryParams.join('&')
+    }
+
+    return request({
+      url: url,
+      method: 'DELETE'
+    })
+  },
+
+  // 牧场管理（管理员）
+  getAllFarms() {
+    return request({ url: '/api/farms?admin=true' })
+  },
+
+  createFarm(data) {
+    return request({
+      url: '/api/farms/admin/create',
+      method: 'POST',
+      data
+    })
+  },
+
+  updateFarm(farmCode, data) {
+    return request({
+      url: `/api/farms/admin/${farmCode}`,
+      method: 'PUT',
+      data
+    })
+  },
+
+  deleteFarm(farmCode) {
+    return request({
+      url: `/api/farms/admin/${farmCode}`,
+      method: 'DELETE'
+    })
+  },
+
+  // 鉴定员-牧场关联
+  getAppraiserFarmLinks() {
+    return request({ url: '/api/appraiser-farms' })
+  },
+
+  getAppraiserFarms(employeeId) {
+    return request({ url: `/api/appraiser-farms/appraiser/${employeeId}` })
+  },
+
+  linkAppraiserFarm(employeeId, farmCode) {
+    return request({
+      url: '/api/appraiser-farms',
+      method: 'POST',
+      data: { employeeId, farmCode }
+    })
+  },
+
+  unlinkAppraiserFarm(employeeId, farmCode) {
+    return request({
+      url: '/api/appraiser-farms',
+      method: 'DELETE',
+      data: { employeeId, farmCode }
+    })
+  },
+
+  // 用户设置
+  getSettings() {
+    return request({ url: '/api/settings' })
+  },
+
+  updateSettings(data) {
+    return request({
+      url: '/api/settings',
+      method: 'PUT',
+      data
+    })
+  },
+
+  resetSettings() {
+    return request({
+      url: '/api/settings/reset',
+      method: 'POST'
+    })
+  },
+
+  // 证书管理
+  getCertificateStatus() {
+    return request({ url: '/api/appraisers/certificate/status' })
+  },
+
+  uploadCertificate(filePath) {
+    return uploadFile({
+      url: '/api/appraisers/certificate/upload',
+      filePath,
+      name: 'file'
+    })
+  },
+
+  getPendingCertificates() {
+    return request({ url: '/api/appraisers/certificate/pending' })
+  },
+
+  reviewCertificate(applicationId, action, rejectReason = '') {
+    return request({
+      url: '/api/appraisers/certificate/review',
+      method: 'POST',
+      data: { applicationId, action, rejectReason }
+    })
+  },
+
+  getAppraiserCertificate(employeeId) {
+    return request({ url: `/api/appraisers/certificate/${employeeId}` })
   }
 }
 

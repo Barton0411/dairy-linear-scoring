@@ -1,0 +1,26 @@
+.home-button {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 12rpx);
+  left: 12rpx;
+  width: 88rpx;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2rpx solid #e0edf6;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.home-button:active {
+  transform: translateY(2rpx);
+  opacity: 0.9;
+}
+
+.home-logo {
+  width: 68rpx;
+  height: 52rpx;
+  display: block;
+}

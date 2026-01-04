@@ -3,6 +3,7 @@
 const { store } = require('../../../store/index')
 const { api } = require('../../../utils/request')
 const { showLoading, hideLoading, showError, showToast } = require('../../../utils/util')
+const { getAppraiserRole } = require('../../../utils/mockData')
 
 Page({
   data: {
@@ -50,35 +51,58 @@ Page({
     showLoading('验证中...')
 
     try {
-      // 调用后端验证接口
-      const result = await api.verifyAppraiser({
+      const verifyRes = await api.verifyAppraiser({
         openId: wxUserInfo.openId,
         name,
         employeeId
       })
 
-      if (result.verified) {
-        // 验证成功，保存用户信息
-        wx.setStorageSync('token', result.token)
-        wx.setStorageSync('userInfo', result.user)
-        wx.removeStorageSync('tempWxUserInfo')
-
-        // 更新store
-        store.setUserInfo(result.user)
-        store.setFarms(result.farms || [])
-
+      if (!verifyRes?.verified) {
         hideLoading()
-
-        // 跳转到首页
-        wx.switchTab({ url: '/pages/index/index' })
-      } else {
-        hideLoading()
-        showError('姓名或工号不匹配')
+        showError(verifyRes?.message || '姓名或工号不匹配，请检查后重试')
+        return
       }
 
+      const role = getAppraiserRole(employeeId)
+      const userInfo = {
+        openId: wxUserInfo.openId,
+        avatarUrl: wxUserInfo.avatarUrl || '',
+        nickName: wxUserInfo.nickName || '',
+        employeeId: verifyRes.user?.employeeId || employeeId,
+        appraiserName: verifyRes.user?.name || name,
+        isCertified: verifyRes.user?.isCertified,
+        role
+      }
+
+      const farms = (verifyRes.farms || []).map(farm => ({
+        farmCode: farm.farmCode || farm.code,
+        farmName: farm.farmName || farm.name,
+        dhiCode: farm.dhiCode || ''
+      }))
+
+      wx.setStorageSync('token', verifyRes.token)
+      wx.setStorageSync('userInfo', userInfo)
+      wx.setStorageSync('farms', farms)
+      wx.removeStorageSync('tempWxUserInfo')
+
+      store.setUserInfo(userInfo)
+      store.setFarms(farms)
+
+      // 尝试保存头像
+      if (userInfo.avatarUrl) {
+        api.updateUserInfo({ avatarUrl: userInfo.avatarUrl }).catch(() => {})
+      }
+
+      hideLoading()
+      showToast('验证成功')
+
+      setTimeout(() => {
+        wx.switchTab({ url: '/pages/index/index' })
+      }, 500)
     } catch (err) {
       hideLoading()
-      showError(err.message || '验证失败')
+      console.error('验证失败:', err)
+      showError(err.message || '验证失败，请重试')
     } finally {
       this.setData({ loading: false })
     }

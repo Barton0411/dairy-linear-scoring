@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "拍照"
+  "navigationBarTitleText": "拍照",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
 }

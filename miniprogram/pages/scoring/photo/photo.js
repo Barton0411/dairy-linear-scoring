@@ -1,5 +1,5 @@
 // pages/scoring/photo/photo.js
-const { storeBindingsBehavior } = require('mobx-miniprogram-binding')
+const { storeBindingsBehavior } = require('mobx-miniprogram-bindings')
 const { store } = require('../../../store/index')
 const { compressImage, showToast, showConfirm } = require('../../../utils/util')
 
@@ -13,16 +13,70 @@ Page({
   },
 
   data: {
-    maxPhotos: 5
+    maxPhotos: 5,
+    gridItems: [],
+    photoCount: 0
   },
 
   onLoad() {
-    this.setData({ maxPhotos: this.data.settings.maxPhotos || 5 })
+    this.setData({ maxPhotos: this.data.settings.maxPhotos || 5 }, () => {
+      this.rebuildGridItems()
+    })
+  },
+
+  onShow() {
+    this.rebuildGridItems()
+  },
+
+  rebuildGridItems() {
+    const maxPhotos = this.data.settings.maxPhotos || 5
+    const photos = store.currentScoring?.photos || []
+
+    const items = photos.map((p, idx) => ({
+      id: p.localId,
+      type: 'photo',
+      path: p.localPath,
+      photoIndex: idx
+    }))
+
+    if (photos.length < maxPhotos) {
+      items.push({ id: 'add', type: 'add' })
+    }
+
+    const targetCount = maxPhotos + 1
+    for (let i = items.length; i < targetCount; i++) {
+      items.push({ id: `empty-${i}`, type: 'empty' })
+    }
+
+    this.setData({ maxPhotos, gridItems: items, photoCount: photos.length })
+  },
+
+  // 添加照片（拍照/相册）
+  onAddPhoto() {
+    const currentPhotos = store.currentScoring?.photos || []
+    if (currentPhotos.length >= this.data.maxPhotos) {
+      showToast(`最多只能拍${this.data.maxPhotos}张照片`)
+      return
+    }
+
+    wx.showActionSheet({
+      itemList: ['拍照', '从相册选择'],
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          this.onTakePhoto()
+          return
+        }
+        if (res.tapIndex === 1) {
+          this.onChooseFromAlbum()
+        }
+      }
+    })
   },
 
   // 拍照
   async onTakePhoto() {
-    if (this.data.currentScoring.photos.length >= this.data.maxPhotos) {
+    const currentPhotos = store.currentScoring?.photos || []
+    if (currentPhotos.length >= this.data.maxPhotos) {
       showToast(`最多只能拍${this.data.maxPhotos}张照片`)
       return
     }
@@ -31,6 +85,7 @@ Page({
       const res = await this.chooseImage('camera')
       const compressed = await compressImage(res.tempFilePaths[0])
       this.addPhoto(compressed)
+      this.rebuildGridItems()
     } catch (err) {
       if (err.errMsg && !err.errMsg.includes('cancel')) {
         showToast('拍照失败')
@@ -40,7 +95,8 @@ Page({
 
   // 从相册选择
   async onChooseFromAlbum() {
-    const remaining = this.data.maxPhotos - this.data.currentScoring.photos.length
+    const currentPhotos = store.currentScoring?.photos || []
+    const remaining = this.data.maxPhotos - currentPhotos.length
     if (remaining <= 0) {
       showToast(`最多只能选${this.data.maxPhotos}张照片`)
       return
@@ -52,6 +108,7 @@ Page({
         const compressed = await compressImage(path)
         this.addPhoto(compressed)
       }
+      this.rebuildGridItems()
     } catch (err) {
       if (err.errMsg && !err.errMsg.includes('cancel')) {
         showToast('选择失败')
@@ -80,7 +137,7 @@ Page({
   // 预览照片
   onPreviewPhoto(e) {
     const { index } = e.currentTarget.dataset
-    const urls = this.data.currentScoring.photos.map(p => p.localPath)
+    const urls = (store.currentScoring?.photos || []).map(p => p.localPath)
     wx.previewImage({
       current: urls[index],
       urls
@@ -93,6 +150,7 @@ Page({
     const confirm = await showConfirm('确定删除这张照片吗？')
     if (confirm) {
       this.removePhoto(index)
+      this.rebuildGridItems()
     }
   },
 

@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "牛只信息"
+  "navigationBarTitleText": "牛只信息",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
 }

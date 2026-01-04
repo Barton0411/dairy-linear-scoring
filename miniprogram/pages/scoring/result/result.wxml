@@ -1,12 +1,13 @@
 <!--pages/scoring/result/result.wxml-->
+<nav-header title="评分结果" />
 <view class="container">
   <!-- 评分结果 -->
   <view class="result-card">
     <view class="result-header">
-      <text class="ear-tag">牛号: {{currentScoring.earTag}}</text>
-      <text class="mode-tag {{currentScoring.mode}}">
-        {{currentScoring.mode === 'normal' ? '正常模式' : '缺陷模式'}}
-      </text>
+      <view class="cattle-meta">
+        <text class="ear-tag">牛号: {{currentScoring.earTag}}</text>
+        <text class="parity" wx:if="{{currentScoring.parity}}">胎次: {{currentScoring.parity}}</text>
+      </view>
     </view>
 
     <view class="score-display">
@@ -19,43 +20,20 @@
         <text class="grade-label">等级</text>
       </view>
     </view>
-  </view>
 
-  <!-- 各类别评分详情 -->
-  <view class="detail-section">
-    <text class="section-title">评分详情</text>
-
-    <view class="category-card" wx:for="{{categories}}" wx:key="key">
-      <view class="category-header">
-        <text class="category-name">{{item.name}}</text>
-        <text class="category-weight">(权重 {{item.weight * 100}}%)</text>
-      </view>
-
-      <view class="trait-scores">
-        <view class="trait-score" wx:for="{{item.traits}}" wx:key="key" wx:for-item="trait">
-          <text class="trait-name">{{trait.name}}</text>
-          <text class="trait-value">{{currentScoring.scores[trait.key]}}</text>
-        </view>
-      </view>
+    <view class="extra-scores" wx:if="{{currentScoring.impressionScore || currentScoring.udderFullness}}">
+      <text class="extra-item" wx:if="{{currentScoring.impressionScore}}">
+        印象分: {{currentScoring.impressionScore}}
+      </text>
+      <text class="extra-item" wx:if="{{currentScoring.udderFullness}}">
+        乳房空满: {{currentScoring.udderFullness}}
+      </text>
     </view>
   </view>
 
-  <!-- 照片预览 -->
-  <view class="photo-section" wx:if="{{currentScoring.photos.length > 0}}">
-    <text class="section-title">照片 ({{currentScoring.photos.length}}张)</text>
-    <scroll-view class="photo-scroll" scroll-x>
-      <image
-        class="photo-thumb"
-        wx:for="{{currentScoring.photos}}"
-        wx:key="localId"
-        src="{{item.localPath}}"
-        mode="aspectFill"
-      />
-    </scroll-view>
-  </view>
-
-  <!-- 操作按钮 -->
-  <view class="action-section safe-bottom">
+  <!-- 操作 -->
+  <view class="action-card card">
+    <text class="action-title">操作</text>
     <button
       class="btn-primary btn-block"
       bindtap="onSubmitAndContinue"
@@ -64,10 +42,50 @@
     >
       {{submitting ? '提交中...' : '提交并继续评分'}}
     </button>
+  </view>
 
-    <view class="secondary-actions">
-      <text class="link-btn" bindtap="onBackHome">返回首页</text>
-      <text class="link-btn" bindtap="onViewRecords">查看记录</text>
+  <view class="secondary-actions safe-bottom">
+    <text class="link-btn" bindtap="onBackToModify">返回修改评分</text>
+    <text class="link-btn" bindtap="onBackHome">返回首页</text>
+    <text class="link-btn" bindtap="onViewRecords">查看记录</text>
+  </view>
+
+  <!-- 评分详情（可展开） -->
+  <view class="details-toggle" bindtap="onToggleDetails">
+    <text>评分详情</text>
+    <text class="details-arrow">{{showDetails ? '▲' : '▼'}}</text>
+  </view>
+
+  <view wx:if="{{showDetails}}">
+    <!-- 各类别评分详情 -->
+    <view class="detail-section">
+      <view class="category-card card" wx:for="{{categories}}" wx:key="key">
+        <view class="category-header">
+          <text class="category-name">{{item.name}}</text>
+          <text class="category-weight">(权重 {{item.weight * 100}}%)</text>
+        </view>
+
+        <view class="trait-scores">
+          <view class="trait-score" wx:for="{{item.traits}}" wx:key="key" wx:for-item="trait">
+            <text class="trait-name">{{trait.name}}</text>
+            <text class="trait-value">{{currentScoring.scores[trait.key]}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 照片预览 -->
+    <view class="photo-section" wx:if="{{currentScoring.photos.length > 0}}">
+      <text class="section-title">照片 ({{currentScoring.photos.length}}张)</text>
+      <scroll-view class="photo-scroll" scroll-x>
+        <image
+          class="photo-thumb"
+          wx:for="{{currentScoring.photos}}"
+          wx:key="localId"
+          src="{{item.localPath}}"
+          mode="aspectFill"
+        />
+      </scroll-view>
     </view>
   </view>
 </view>

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "设置",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

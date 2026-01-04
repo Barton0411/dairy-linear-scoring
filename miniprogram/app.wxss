@@ -4,8 +4,8 @@ page {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 28rpx;
   line-height: 1.5;
-  color: #333;
-  background-color: #f5f5f5;
+  color: #1c1c1e;
+  background-color: #f2f8fb; /* 伊利官网常用浅蓝背景 */
 }
 
 /* 通用容器 */
@@ -17,41 +17,43 @@ page {
 /* 卡片样式 */
 .card {
   background: #fff;
-  border-radius: 16rpx;
+  border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  border: 2rpx solid #e0edf6;
+  box-shadow: none;
 }
 
 .card-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: #1c1c1e;
   margin-bottom: 20rpx;
   padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid #e0edf6;
 }
 
 /* 按钮样式 */
 .btn-primary {
-  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  background: #0087cd;
   color: #fff;
   border: none;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   padding: 24rpx 48rpx;
   font-size: 32rpx;
   font-weight: 500;
+  box-shadow: none;
 }
 
 .btn-primary:active {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .btn-secondary {
-  background: #f5f5f5;
-  color: #333;
-  border: 1rpx solid #ddd;
-  border-radius: 12rpx;
+  background: #fff;
+  color: #1c1c1e;
+  border: 1rpx solid #d8d8d8;
+  border-radius: 16rpx;
   padding: 24rpx 48rpx;
   font-size: 32rpx;
 }
@@ -77,14 +79,15 @@ page {
   width: 100%;
   height: 88rpx;
   padding: 0 24rpx;
-  border: 1rpx solid #ddd;
-  border-radius: 8rpx;
+  border: 1rpx solid #d8d8d8;
+  border-radius: 14rpx;
   font-size: 30rpx;
   box-sizing: border-box;
+  background: #fff;
 }
 
 .form-input:focus {
-  border-color: #07C160;
+  border-color: #0087cd;
 }
 
 /* 评分滑块 */
@@ -106,7 +109,7 @@ page {
 .score-value {
   font-size: 32rpx;
   font-weight: 600;
-  color: #07C160;
+  color: #0087cd;
 }
 
 /* 列表样式 */
@@ -114,7 +117,7 @@ page {
   display: flex;
   align-items: center;
   padding: 24rpx 0;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid #e0edf6;
 }
 
 .list-item:last-child {
@@ -183,7 +186,8 @@ page {
 /* 文字工具类 */
 .text-center { text-align: center; }
 .text-gray { color: #999; }
-.text-green { color: #07C160; }
+.text-brand { color: #0087cd; }
+.text-success { color: #278546; }
 .text-sm { font-size: 24rpx; }
 .text-lg { font-size: 36rpx; }
 .font-bold { font-weight: 600; }

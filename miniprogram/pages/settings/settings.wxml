@@ -1,0 +1,294 @@
+<nav-header title="设置" />
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="section">
+    <view class="section-title">用户信息</view>
+    <view class="user-info">
+      <view class="info-item">
+        <text class="info-label">鉴定员姓名</text>
+        <text class="info-value">{{userInfo.appraiserName}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">工号</text>
+        <text class="info-value">{{userInfo.employeeId}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">角色</text>
+        <text class="info-value">
+          {{userInfo.role === 'super_admin' ? '超级管理员' : (userInfo.role === 'admin' ? '管理员' : '鉴定员')}}
+        </text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">认证状态</text>
+        <text class="info-value certified-{{userInfo.isCertified ? 'yes' : 'no'}}">
+          {{userInfo.isCertified ? '奶协认证鉴定员' : '未认证鉴定员'}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 证书管理 -->
+  <view class="section card">
+    <view class="section-title">证书管理</view>
+
+    <!-- 未上传状态 -->
+    <view class="cert-empty" wx:if="{{certStatus === 'none'}}">
+      <text class="empty-text">暂未上传认证证书</text>
+      <button class="upload-btn primary" bindtap="onUploadCertificate">
+        上传证书
+      </button>
+    </view>
+
+    <!-- 待审批状态 -->
+    <view class="cert-status pending" wx:elif="{{certStatus === 'pending'}}">
+      <view class="status-banner">
+        <text class="status-icon">⏳</text>
+        <text class="status-text">证书审批中</text>
+      </view>
+      <image
+        class="cert-thumbnail"
+        src="{{currentApplication.ossUrl}}"
+        mode="aspectFit"
+        bindtap="onPreviewCertificate"
+      />
+      <button class="upload-btn secondary" bindtap="onUploadCertificate">
+        重新上传
+      </button>
+    </view>
+
+    <!-- 已通过状态 -->
+    <view class="cert-status approved" wx:elif="{{certStatus === 'approved'}}">
+      <view class="status-banner success">
+        <text class="status-icon">✅</text>
+        <text class="status-text">已通过审批</text>
+      </view>
+      <view class="cert-badge-large">奶协认证鉴定员</view>
+      <image
+        class="cert-thumbnail"
+        src="{{currentApplication.ossUrl}}"
+        mode="aspectFit"
+        bindtap="onPreviewCertificate"
+      />
+    </view>
+
+    <!-- 已拒绝状态 -->
+    <view class="cert-status rejected" wx:elif="{{certStatus === 'rejected'}}">
+      <view class="status-banner error">
+        <text class="status-icon">❌</text>
+        <text class="status-text">审批未通过</text>
+      </view>
+      <view class="reject-reason">
+        <text class="label">拒绝原因：</text>
+        <text class="reason">{{currentApplication.rejectReason}}</text>
+      </view>
+      <image
+        class="cert-thumbnail"
+        src="{{currentApplication.ossUrl}}"
+        mode="aspectFit"
+        bindtap="onPreviewCertificate"
+      />
+      <button class="upload-btn primary" bindtap="onUploadCertificate">
+        重新上传
+      </button>
+    </view>
+  </view>
+
+  <!-- 性状默认分设置 -->
+  <view class="section">
+    <!-- 体躯容量 -->
+    <view class="category-block">
+      <view class="category-name">体躯容量 (18%)</view>
+      <view class="trait-item" wx:for="{{bodyTraits}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <input
+          class="score-input"
+          type="number"
+          value="{{defaultScores[item.key]}}"
+          data-key="{{item.key}}"
+          bindinput="onScoreInput"
+          bindblur="onScoreBlur"
+        />
+      </view>
+    </view>
+
+    <!-- 尻部 -->
+    <view class="category-block">
+      <view class="category-name">尻部 (10%)</view>
+      <view class="trait-item" wx:for="{{rumpTraits}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <input
+          class="score-input"
+          type="number"
+          value="{{defaultScores[item.key]}}"
+          data-key="{{item.key}}"
+          bindinput="onScoreInput"
+          bindblur="onScoreBlur"
+        />
+      </view>
+    </view>
+
+    <!-- 肢蹄 -->
+    <view class="category-block">
+      <view class="category-name">肢蹄 (20%)</view>
+      <view class="trait-item" wx:for="{{legsTraits}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <input
+          class="score-input"
+          type="number"
+          value="{{defaultScores[item.key]}}"
+          data-key="{{item.key}}"
+          bindinput="onScoreInput"
+          bindblur="onScoreBlur"
+        />
+      </view>
+    </view>
+
+    <!-- 泌乳系统 -->
+    <view class="category-block">
+      <view class="category-name">泌乳系统 (42%)</view>
+      <view class="trait-item" wx:for="{{mammaryTraits}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <input
+          class="score-input"
+          type="number"
+          value="{{defaultScores[item.key]}}"
+          data-key="{{item.key}}"
+          bindinput="onScoreInput"
+          bindblur="onScoreBlur"
+        />
+      </view>
+    </view>
+
+    <!-- 乳用特征 -->
+    <view class="category-block">
+      <view class="category-name">乳用特征 (10%)</view>
+      <view class="trait-item" wx:for="{{dairyTraits}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <input
+          class="score-input"
+          type="number"
+          value="{{defaultScores[item.key]}}"
+          data-key="{{item.key}}"
+          bindinput="onScoreInput"
+          bindblur="onScoreBlur"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他默认值 -->
+  <view class="section">
+    <view class="section-title">其他默认值</view>
+
+    <view class="form-group">
+      <text class="form-label">印象分默认值 (50-100分)</text>
+      <input
+        class="score-input impression"
+        type="number"
+        value="{{settings.defaultImpressionScore}}"
+        bindinput="onImpressionInput"
+        bindblur="onImpressionBlur"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">乳房空满默认值</text>
+      <picker mode="selector" range="{{udderFullnessOptions}}" value="{{udderFullnessIndex}}" bindchange="onUdderFullnessChange">
+        <view class="picker-display">
+          <text class="picker-value">{{settings.defaultUdderFullness}}</text>
+          <text class="picker-arrow">></text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 拍照模式设置 -->
+  <view class="section">
+    <view class="section-title">拍照设置</view>
+    <radio-group bindchange="onPhotoModeChange">
+      <label class="radio-item" wx:for="{{photoModeOptions}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{settings.photoMode === item.value}}" color="#0087CD"/>
+        <view class="radio-content">
+          <text class="radio-title">{{item.label}}</text>
+          <text class="radio-desc">{{item.desc}}</text>
+        </view>
+      </label>
+    </radio-group>
+
+    <!-- 仅在阈值模式下显示详细设置 -->
+    <view class="threshold-settings" wx:if="{{settings.photoMode === 'threshold'}}">
+      <view class="form-group">
+        <text class="form-label">优秀牛只提示阈值（≥）</text>
+        <input
+          class="score-input impression"
+          type="number"
+          value="{{settings.photoThresholdExcellent}}"
+          data-type="excellent"
+          bindinput="onThresholdInput"
+          bindblur="onThresholdBlur"
+        />
+      </view>
+      <view class="form-group">
+        <text class="form-label">较差牛只提示阈值（≤）</text>
+        <input
+          class="score-input impression"
+          type="number"
+          value="{{settings.photoThresholdPoor}}"
+          data-type="poor"
+          bindinput="onThresholdInput"
+          bindblur="onThresholdBlur"
+        />
+      </view>
+      <view class="switch-item">
+        <text class="switch-label">优秀牛只提示拍照（总分≥{{settings.photoThresholdExcellent}}）</text>
+        <switch checked="{{settings.photoPromptExcellent}}" bindchange="onPhotoPromptExcellentChange" color="#0087CD"/>
+      </view>
+      <view class="switch-item">
+        <text class="switch-label">较差牛只提示拍照（总分≤{{settings.photoThresholdPoor}}）</text>
+        <switch checked="{{settings.photoPromptPoor}}" bindchange="onPhotoPromptPoorChange" color="#0087CD"/>
+      </view>
+    </view>
+  </view>
+
+  <!-- 批量操作 -->
+  <view class="section">
+    <view class="section-title">批量设置</view>
+    <view class="batch-buttons">
+      <button class="batch-btn" bindtap="onSetAllToFive">全部设为5分</button>
+      <button class="batch-btn" bindtap="onResetDefaults">恢复默认</button>
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="action-area">
+    <button class="btn-primary btn-block" bindtap="onSaveSettings" loading="{{saving}}">
+      保存设置
+    </button>
+  </view>
+
+  <!-- 管理功能（仅管理员） -->
+  <view class="section" wx:if="{{isAdmin}}">
+    <view class="section-title">管理功能</view>
+    <view class="admin-menu">
+      <view class="admin-menu-item" bindtap="onOpenAdminPanel">
+        <view class="menu-left">
+          <text class="menu-text">管理后台</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 品牌信息 -->
+  <view class="section">
+    <view class="brand-row">
+      <image class="brand-logo" src="/assets/brand/yili-logo.png" mode="aspectFit" />
+      <text class="brand-team">开发团队：伊利奶科院育种中心</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-area">
+    <button class="btn-logout" bindtap="onLogout">退出登录</button>
+  </view>
+</view>

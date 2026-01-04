@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "团队信息",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
+,
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

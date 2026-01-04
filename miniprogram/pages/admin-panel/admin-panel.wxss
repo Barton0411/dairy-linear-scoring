@@ -1,0 +1,724 @@
+/* pages/admin-panel/admin-panel.wxss */
+
+.container {
+  min-height: 100vh;
+  background: transparent;
+  padding: 0 0 30rpx;
+  box-sizing: border-box;
+}
+
+/* 页面标题 */
+.header {
+  background: #0087cd;
+  padding: 32rpx 30rpx 36rpx;
+  color: #fff;
+}
+
+.title {
+  font-size: 32rpx;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  opacity: 0.9;
+  display: block;
+}
+
+/* Tab 切换 */
+.tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 22rpx 0;
+  font-size: 26rpx;
+  color: #5f6464;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #0087cd;
+  font-weight: 600;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  background: #0087cd;
+  border-radius: 2rpx;
+}
+
+/* Tab 内容区 */
+.tab-content {
+  padding: 20rpx;
+}
+
+/* ===== 鉴定员管理 Tab ===== */
+.appraiser-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.appraiser-item {
+  background: #fff;
+  border: 2rpx solid #e0edf6;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.appraiser-info {
+  flex: 1;
+}
+
+.appraiser-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 6rpx;
+}
+
+.appraiser-id {
+  font-size: 24rpx;
+  color: #5f6464;
+  margin-bottom: 8rpx;
+}
+
+.appraiser-farms {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #5f6464;
+  line-height: 1.5;
+}
+
+.appraiser-role {
+  margin-left: 16rpx;
+}
+
+.role-picker,
+.role-display {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  background: #f1f2f3;
+  border-radius: 16rpx;
+  min-width: 140rpx;
+  justify-content: space-between;
+}
+
+.role-text {
+  font-size: 24rpx;
+  color: #1c1c1e;
+}
+
+.role-text.super-admin {
+  color: #0087cd;
+  font-weight: 600;
+}
+
+.arrow {
+  margin-left: 8rpx;
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+/* ===== 牧场匹配 Tab ===== */
+.section {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #1c1c1e;
+  padding: 10rpx 0 12rpx;
+}
+
+.picker-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e0edf6;
+}
+
+.picker-label {
+  font-size: 26rpx;
+  color: #1c1c1e;
+  flex: 1;
+}
+
+.farm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.farm-item {
+  background: #fff;
+  border: 2rpx solid #e0edf6;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.farm-info {
+  flex: 1;
+}
+
+.farm-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 6rpx;
+}
+
+.farm-code,
+.farm-dhi {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.farm-action {
+  margin-left: 16rpx;
+}
+
+/* ===== 牧场管理 Tab ===== */
+.farm-manage-toolbar {
+  margin-bottom: 16rpx;
+}
+
+.create-farm-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #0087cd;
+  color: #fff;
+  border: none;
+  border-radius: 24rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.create-farm-btn::after {
+  border: none;
+}
+
+.farm-manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.farm-card {
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.farm-manage-info {
+  flex: 1;
+}
+
+.farm-manage-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 6rpx;
+}
+
+.farm-manage-details {
+  display: flex;
+  gap: 20rpx;
+  flex-wrap: wrap;
+  margin-bottom: 8rpx;
+}
+
+.badges-row {
+  display: flex;
+  gap: 8rpx;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin-bottom: 8rpx;
+}
+
+.farm-manage-code,
+.farm-manage-dhi {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.farm-manage-dhi.no-dhi {
+  color: #ff9500;
+}
+
+.farm-manage-actions {
+  margin-left: 16rpx;
+  display: flex;
+  align-items: center;
+}
+
+.btn-more {
+  padding: 8rpx 20rpx;
+  background: #fff;
+  border: 2rpx solid rgba(0, 135, 205, 0.6);
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #0087cd;
+}
+
+.btn-more::after {
+  border: none;
+}
+
+.no-permission {
+  font-size: 22rpx;
+  color: #999;
+  padding: 8rpx 12rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+  background: #fff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e0edf6;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 编辑弹窗 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.modal-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  padding: 24rpx 30rpx 10rpx;
+}
+
+.form-item {
+  margin-bottom: 20rpx;
+}
+
+.form-item-label {
+  font-size: 24rpx;
+  color: #5f6464;
+  margin-bottom: 10rpx;
+}
+
+.form-item-input {
+  width: 100%;
+  height: 72rpx;
+  padding: 0 20rpx;
+  background: #f6fbfd;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  color: #1c1c1e;
+  border: 1rpx solid transparent;
+}
+
+.form-item-input:focus {
+  background: #fff;
+  border-color: #0087cd;
+}
+
+.form-item-input[disabled] {
+  color: #979797;
+  background: #f1f2f3;
+}
+
+.form-item-hint {
+  font-size: 22rpx;
+  color: #5f6464;
+  margin-top: 6rpx;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12rpx;
+  padding: 20rpx 30rpx 30rpx;
+  border-top: 1rpx solid #e0edf6;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-btn::after {
+  border: none;
+}
+
+.modal-btn-cancel {
+  background: #f1f2f3;
+  color: #5f6464;
+}
+
+.modal-btn-confirm {
+  background: #0087cd;
+  color: #fff;
+}
+/* 鉴定员管理新增样式 */
+
+.add-button-container {
+  padding: 20rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.add-button {
+  width: 100%;
+  background: #0087cd;
+  color: #fff;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 24rpx;
+  border: none;
+}
+
+.add-button:active {
+  opacity: 0.8;
+}
+
+.appraiser-item {
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.appraiser-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-btn {
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+  border-radius: 8rpx;
+  border: none;
+}
+
+.edit-btn {
+  background: #0087cd;
+  color: #fff;
+}
+
+.edit-btn:active {
+  opacity: 0.8;
+}
+
+.delete-btn {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+.delete-btn:active {
+  opacity: 0.8;
+}
+
+.protected-badge {
+  padding: 8rpx 16rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.form-item-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.form-item-picker .arrow {
+  color: #999;
+  font-size: 32rpx;
+}
+
+.form-item-hint {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+/* 鉴定员管理优化样式 */
+.appraiser-farms-row {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #5f6464;
+  display: flex;
+  align-items: flex-start;
+}
+
+.farms-label {
+  white-space: nowrap;
+  color: #666;
+}
+
+.farms-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.super-admin-badge {
+  font-size: 22rpx;
+  color: #ff6600;
+  font-weight: 600;
+  padding: 8rpx 12rpx;
+  background: #fff3e0;
+  border-radius: 8rpx;
+}
+
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.cert-badge.certified {
+  background: #e8f4ea;
+  color: #27854b;
+}
+
+.cert-badge.not-certified {
+  background: #fff5e6;
+  color: #ff8800;
+}
+
+/* 角色徽章 */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.role-badge.super-admin {
+  background: #ffe4e6;
+  color: #dc2626;
+  border: 1rpx solid #fecaca;
+}
+
+.role-badge.admin {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1rpx solid #bae6fd;
+}
+
+.role-badge.appraiser {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1rpx solid #e5e7eb;
+}
+
+/* Tab徽章样式 */
+.tab-item {
+  position: relative;
+}
+
+.tab-badge {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  background: #ff4444;
+  color: white;
+  font-size: 20rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  animation: badge-pulse 1.5s infinite;
+  box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
+}
+
+@keyframes badge-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8rpx rgba(255, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 68, 68, 0);
+  }
+}
+
+/* 证书申请卡片 */
+.cert-application-card {
+  margin-bottom: 20rpx;
+}
+
+.appraiser-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.appraiser-info .name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  display: block;
+}
+
+.appraiser-info .employee-id {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.upload-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.cert-preview {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+  border: 2rpx solid #e0e0e0;
+}
+
+.cert-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btn-approve,
+.btn-reject {
+  flex: 1;
+  height: 72rpx;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.btn-approve {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-approve::after {
+  border: none;
+}
+
+.btn-reject {
+  background: #f44336;
+  color: white;
+}
+
+.btn-reject::after {
+  border: none;
+}
+
+/* 拒绝原因弹窗 */
+.reject-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+}

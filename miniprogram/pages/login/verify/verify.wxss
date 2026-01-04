@@ -2,9 +2,16 @@
 
 .container {
   min-height: 100vh;
-  padding: 60rpx 40rpx;
+  padding: 60rpx 40rpx 0;
   box-sizing: border-box;
-  background: #f5f5f5;
+  background: #f2f8fb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content-wrapper {
+  flex: 1;
 }
 
 .header {
@@ -14,26 +21,26 @@
 .title {
   font-size: 48rpx;
   font-weight: 600;
-  color: #333;
+  color: #1c1c1e;
   display: block;
 }
 
 .subtitle {
   font-size: 28rpx;
-  color: #999;
+  color: #5f6464;
   margin-top: 16rpx;
   display: block;
 }
 
 .form-section {
   background: #fff;
-  border-radius: 16rpx;
+  border-radius: 20rpx;
   padding: 20rpx 30rpx;
 }
 
 .form-group {
   padding: 24rpx 0;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid #e0edf6;
 }
 
 .form-group:last-child {
@@ -42,7 +49,7 @@
 
 .form-label {
   font-size: 28rpx;
-  color: #666;
+  color: #5f6464;
   display: block;
   margin-bottom: 16rpx;
 }
@@ -51,7 +58,7 @@
   width: 100%;
   height: 80rpx;
   font-size: 32rpx;
-  color: #333;
+  color: #1c1c1e;
 }
 
 .tips {
@@ -62,27 +69,35 @@
 .tips-text {
   display: block;
   font-size: 24rpx;
-  color: #999;
+  color: #5f6464;
   line-height: 1.8;
 }
 
 .action-section {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 30rpx 40rpx;
-  background: #fff;
-  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  padding: 30rpx 0 40rpx;
+  background: #f2f8fb;
 }
 
 .btn-primary {
   height: 96rpx;
-  line-height: 96rpx;
-  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  background: #0087cd;
   color: #fff;
-  border-radius: 48rpx;
+  border-radius: 24rpx;
   font-size: 34rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-primary:active {
+  opacity: 0.88;
 }
 
 .btn-primary[disabled] {

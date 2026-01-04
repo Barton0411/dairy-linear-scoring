@@ -1,49 +1,56 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/records/list/list",
+    "pages/settings/settings",
     "pages/login/login",
     "pages/login/verify/verify",
+    "pages/legal/agreement/agreement",
+    "pages/legal/privacy/privacy",
+    "pages/webview/webview",
     "pages/farm-select/farm-select",
+    "pages/farm-create/farm-create",
+    "pages/admin-panel/admin-panel",
+    "pages/team-info/team-info",
     "pages/scoring/info/info",
-    "pages/scoring/normal/normal",
-    "pages/scoring/defect/defect",
+    "pages/scoring/unified/unified",
     "pages/scoring/photo/photo",
     "pages/scoring/result/result",
-    "pages/records/list/list",
     "pages/records/detail/detail",
-    "pages/settings/settings"
+    "pages/test-diagram/test-diagram"
   ],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#07C160",
-    "navigationBarTitleText": "奶牛线性评定",
-    "navigationBarTextStyle": "white"
-  },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#07C160",
+    "color": "#979797",
+    "selectedColor": "#0087CD",
     "backgroundColor": "#ffffff",
-    "borderStyle": "black",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "assets/icons/home.png",
-        "selectedIconPath": "assets/icons/home-active.png"
+        "iconPath": "assets/tabbar/home.png",
+        "selectedIconPath": "assets/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/records/list/list",
         "text": "记录",
-        "iconPath": "assets/icons/record.png",
-        "selectedIconPath": "assets/icons/record-active.png"
+        "iconPath": "assets/tabbar/records.png",
+        "selectedIconPath": "assets/tabbar/records-active.png"
       },
       {
         "pagePath": "pages/settings/settings",
         "text": "设置",
-        "iconPath": "assets/icons/settings.png",
-        "selectedIconPath": "assets/icons/settings-active.png"
+        "iconPath": "assets/tabbar/settings.png",
+        "selectedIconPath": "assets/tabbar/settings-active.png"
       }
     ]
+  },
+  "usingComponents": {},
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "伊利奶牛体型外貌鉴定系统",
+    "navigationBarTextStyle": "black"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",

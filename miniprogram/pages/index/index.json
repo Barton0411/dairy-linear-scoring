@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText": "奶牛线性评定",
-  "enablePullDownRefresh": true
+  "navigationBarTitleText": "伊利奶牛体型外貌鉴定系统",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
 }

@@ -1,0 +1,4 @@
+<home-button />
+<view class="container">
+  <web-view src="{{url}}"></web-view>
+</view>

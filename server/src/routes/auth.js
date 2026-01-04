@@ -61,7 +61,10 @@ router.post('/login', async (req, res) => {
     if (user.employee_id) {
       // 获取关联牧场
       const [farms] = await db.query(
-        'SELECT DISTINCT farm_code, farm_name FROM appraiser_farms WHERE employee_id = ?',
+        `SELECT DISTINCT f.farm_code, f.farm_name, f.dhi_code
+         FROM appraiser_farms af
+         JOIN farms f ON f.farm_code = af.farm_code
+         WHERE af.employee_id = ?`,
         [user.employee_id]
       )
 
@@ -84,7 +87,8 @@ router.post('/login', async (req, res) => {
         },
         farms: farms.map(f => ({
           code: f.farm_code,
-          name: f.farm_name
+          name: f.farm_name,
+          dhiCode: f.dhi_code || ''
         }))
       })
     }
@@ -112,9 +116,9 @@ router.post('/verify', async (req, res) => {
       return res.status(400).json({ error: '缺少必要参数' })
     }
 
-    // 查询appraiser_farms表验证身份
+    // 查询appraisers表验证身份
     const [appraisers] = await db.query(
-      'SELECT * FROM appraiser_farms WHERE employee_id = ? AND appraiser_name = ?',
+      'SELECT * FROM appraisers WHERE employee_id = ? AND appraiser_name = ?',
       [employeeId, name]
     )
 
@@ -140,9 +144,16 @@ router.post('/verify', async (req, res) => {
       [openId]
     )
 
+    if (users.length === 0) {
+      return res.status(404).json({ error: '用户不存在' })
+    }
+
     // 获取关联牧场
     const [farms] = await db.query(
-      'SELECT DISTINCT farm_code, farm_name FROM appraiser_farms WHERE employee_id = ?',
+      `SELECT DISTINCT f.farm_code, f.farm_name, f.dhi_code
+       FROM appraiser_farms af
+       JOIN farms f ON f.farm_code = af.farm_code
+       WHERE af.employee_id = ?`,
       [employeeId]
     )
 
@@ -164,7 +175,8 @@ router.post('/verify', async (req, res) => {
       },
       farms: farms.map(f => ({
         code: f.farm_code,
-        name: f.farm_name
+        name: f.farm_name,
+        dhiCode: f.dhi_code || ''
       }))
     })
 

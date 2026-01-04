@@ -47,17 +47,22 @@ router.post('/upload', authMiddleware, upload.single('file'), async (req, res) =
     // 上传到OSS
     const result = await ossClient.put(ossKey, file.buffer)
 
+    // 生成公开HTTPS URL
+    const bucket = process.env.OSS_BUCKET
+    const region = process.env.OSS_REGION
+    const ossUrl = `https://${bucket}.${region}.aliyuncs.com/${ossKey}`
+
     // 保存到数据库
     const [dbResult] = await db.query(
       'INSERT INTO photos (score_id, user_id, oss_key, oss_url) VALUES (?, ?, ?, ?)',
-      [scoreId, req.user.userId, ossKey, result.url]
+      [scoreId, req.user.userId, ossKey, ossUrl]
     )
 
     res.json({
       id: dbResult.insertId,
       localId,
       ossKey,
-      url: result.url
+      url: ossUrl
     })
 
   } catch (err) {

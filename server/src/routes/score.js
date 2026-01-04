@@ -5,16 +5,59 @@ const { authMiddleware } = require('../middleware/auth')
 
 const router = express.Router()
 
+// 检查当天是否已有同一牧场+牛号的评分记录
+router.get('/check-today/:farmCode/:earTag', authMiddleware, async (req, res) => {
+  try {
+    const { farmCode, earTag } = req.params
+
+    // 查询当天该用户对该牧场+牛号的评分记录
+    const [scores] = await db.query(
+      `SELECT id, ear_tag, total_score, grade, created_at
+       FROM scores
+       WHERE farm_code = ?
+       AND ear_tag = ?
+       AND user_id = ?
+       AND DATE(created_at) = CURDATE()
+       ORDER BY created_at DESC
+       LIMIT 1`,
+      [farmCode, earTag, req.user.userId]
+    )
+
+    if (scores.length > 0) {
+      res.json({
+        exists: true,
+        record: {
+          id: scores[0].id,
+          earTag: scores[0].ear_tag,
+          totalScore: scores[0].total_score,
+          grade: scores[0].grade,
+          createdAt: scores[0].created_at
+        }
+      })
+    } else {
+      res.json({ exists: false })
+    }
+
+  } catch (err) {
+    console.error('Check today score error:', err)
+    res.status(500).json({ error: '检查记录失败' })
+  }
+})
+
 // 提交评分
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const {
       localId,
       earTag,
+      parity,
       farmCode,
       farmName,
+      dhiCode,
       mode,
       scores,
+      impressionScore,
+      udderFullness,
       totalScore,
       grade
     } = req.body
@@ -38,17 +81,20 @@ router.post('/', authMiddleware, async (req, res) => {
     // 插入评分记录
     const [result] = await db.query(
       `INSERT INTO scores (
-        local_id, ear_tag, farm_code, farm_name, user_id,
+        local_id, ear_tag, parity, farm_code, farm_name, dhi_code, user_id,
         employee_id, appraiser_name, is_certified, score_mode,
         tg, xk, ts, yqd, kjd, kk, tjd, tgsd, gzd, hzcs, hzhs,
         rfsd, zyxrd, qrffz, qrtwz, qrtcd, hrffzgd, hrffzkd, hrtwz, ljx,
+        impression_score, udder_fullness,
         total_score, grade
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         localId,
         earTag,
+        parity || null,
         farmCode,
         farmName,
+        dhiCode || null,
         req.user.userId,
         req.user.employeeId,
         req.user.appraiserName,
@@ -60,6 +106,8 @@ router.post('/', authMiddleware, async (req, res) => {
         scores.rfsd, scores.zyxrd, scores.qrffz, scores.qrtwz, scores.qrtcd,
         scores.hrffzgd, scores.hrffzkd, scores.hrtwz,
         scores.ljx,
+        impressionScore || null,
+        udderFullness || null,
         totalScore,
         grade
       ]
@@ -115,7 +163,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params
-    const { scores, totalScore, grade } = req.body
+    const { scores, impressionScore, udderFullness, totalScore, grade } = req.body
 
     // 检查权限
     const [existing] = await db.query(
@@ -140,6 +188,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
         rfsd = ?, zyxrd = ?, qrffz = ?, qrtwz = ?, qrtcd = ?,
         hrffzgd = ?, hrffzkd = ?, hrtwz = ?,
         ljx = ?,
+        impression_score = ?, udder_fullness = ?,
         total_score = ?, grade = ?
       WHERE id = ?`,
       [
@@ -149,6 +198,8 @@ router.put('/:id', authMiddleware, async (req, res) => {
         scores.rfsd, scores.zyxrd, scores.qrffz, scores.qrtwz, scores.qrtcd,
         scores.hrffzgd, scores.hrffzkd, scores.hrtwz,
         scores.ljx,
+        impressionScore || null,
+        udderFullness || null,
         totalScore, grade,
         id
       ]

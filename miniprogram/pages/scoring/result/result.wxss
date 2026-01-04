@@ -7,7 +7,7 @@
 
 /* 结果卡片 */
 .result-card {
-  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  background: #0087cd;
   border-radius: 24rpx;
   padding: 40rpx;
   color: #fff;
@@ -17,13 +17,24 @@
 .result-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 40rpx;
+}
+
+.cattle-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
 .ear-tag {
   font-size: 32rpx;
   font-weight: 600;
+}
+
+.parity {
+  font-size: 26rpx;
+  opacity: 0.9;
 }
 
 .mode-tag {
@@ -63,23 +74,48 @@
   margin-top: 12rpx;
 }
 
+.extra-scores {
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+  margin-top: 30rpx;
+  padding-top: 30rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.extra-item {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+/* 操作卡片 */
+.action-card {
+  margin-top: 10rpx;
+}
+
+.action-title {
+  font-size: 26rpx;
+  color: #5f6464;
+  display: block;
+  margin-bottom: 18rpx;
+}
+
 /* 详情区域 */
 .detail-section {
-  margin-bottom: 30rpx;
+  margin-top: 16rpx;
+  margin-bottom: 24rpx;
 }
 
 .section-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #333;
+  color: #1c1c1e;
   display: block;
   margin-bottom: 20rpx;
 }
 
 .category-card {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 24rpx;
+  /* use global .card */
   margin-bottom: 16rpx;
 }
 
@@ -88,7 +124,7 @@
   align-items: center;
   margin-bottom: 16rpx;
   padding-bottom: 16rpx;
-  border-bottom: 1rpx solid #eee;
+  border-bottom: 1rpx solid #e0edf6;
 }
 
 .category-name {
@@ -126,13 +162,13 @@
 
 .trait-name {
   font-size: 26rpx;
-  color: #666;
+  color: #5f6464;
 }
 
 .trait-value {
   font-size: 28rpx;
   font-weight: 600;
-  color: #07C160;
+  color: #0087cd;
 }
 
 /* 照片区域 */
@@ -153,8 +189,21 @@
 }
 
 /* 操作区域 */
-.action-section {
-  padding-top: 20rpx;
+.secondary-actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 18rpx 0 8rpx;
+}
+
+.link-btn {
+  font-size: 28rpx;
+  color: #0087cd;
+  padding: 10rpx 20rpx;
+}
+
+.link-btn:active {
+  opacity: 0.7;
 }
 
 .success-message {
@@ -167,7 +216,7 @@
 .success-icon {
   width: 100rpx;
   height: 100rpx;
-  background: #07C160;
+  background: #0087cd;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -180,38 +229,39 @@
 
 .success-text {
   font-size: 32rpx;
-  color: #333;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 20rpx;
-}
-
-.action-buttons .btn-secondary,
-.action-buttons .btn-primary {
-  flex: 1;
-  height: 96rpx;
-  border-radius: 48rpx;
-  font-size: 32rpx;
+  color: #1c1c1e;
 }
 
 .btn-secondary {
-  background: #f5f5f5;
-  color: #666;
+  background: #eef0f2;
+  color: #5f6464;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #07C160 0%, #05a050 100%);
+  background: #0087cd;
   color: #fff;
+  border-radius: 24rpx;
+  box-shadow: none;
 }
 
-.view-records {
-  text-align: center;
-  padding: 30rpx;
-}
-
-.view-records text {
+/* 展开/收起 */
+.details-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  border: 2rpx solid #e0edf6;
+  color: #1c1c1e;
   font-size: 28rpx;
-  color: #07C160;
+}
+
+.details-toggle:active {
+  opacity: 0.92;
+}
+
+.details-arrow {
+  color: #5f6464;
+  font-size: 24rpx;
 }

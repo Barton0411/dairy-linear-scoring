@@ -36,17 +36,20 @@ router.post('/', authMiddleware, async (req, res) => {
         // 插入新记录
         const [result] = await db.query(
           `INSERT INTO scores (
-            local_id, ear_tag, farm_code, farm_name, user_id,
+            local_id, ear_tag, parity, farm_code, farm_name, dhi_code, user_id,
             employee_id, appraiser_name, is_certified, score_mode,
             tg, xk, ts, yqd, kjd, kk, tjd, tgsd, gzd, hzcs, hzhs,
             rfsd, zyxrd, qrffz, qrtwz, qrtcd, hrffzgd, hrffzkd, hrtwz, ljx,
+            impression_score, udder_fullness,
             total_score, grade, created_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             scoreData.localId,
             scoreData.earTag,
+            scoreData.parity || null,
             scoreData.farmCode || scoreData.farmId,
             scoreData.farmName,
+            scoreData.dhiCode || null,
             req.user.userId,
             req.user.employeeId,
             req.user.appraiserName,
@@ -58,6 +61,8 @@ router.post('/', authMiddleware, async (req, res) => {
             scoreData.scores.rfsd, scoreData.scores.zyxrd, scoreData.scores.qrffz, scoreData.scores.qrtwz, scoreData.scores.qrtcd,
             scoreData.scores.hrffzgd, scoreData.scores.hrffzkd, scoreData.scores.hrtwz,
             scoreData.scores.ljx,
+            scoreData.impressionScore || null,
+            scoreData.udderFullness || null,
             scoreData.totalScore,
             scoreData.grade,
             scoreData.createdAt || new Date()

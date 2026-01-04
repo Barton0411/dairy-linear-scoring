@@ -1,0 +1,94 @@
+<nav-header title="选择牧场" />
+<view class="container">
+  <view class="header">
+    <text class="title">选择工作牧场</text>
+    <text class="subtitle">请选择您要评分的牧场</text>
+  </view>
+
+  <!-- 搜索框 -->
+  <view class="search-box card">
+    <view class="search-wrapper">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索牧场名称或站号"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <text class="clear-icon" wx:if="{{searchKeyword}}" bindtap="onClearSearch">×</text>
+    </view>
+  </view>
+
+  <view class="farm-list">
+    <view
+      class="farm-item card {{currentFarm && currentFarm.farmCode === item.farmCode ? 'active' : ''}}"
+      wx:for="{{filteredFarms}}"
+      wx:key="farmCode"
+      bindtap="onSelectFarm"
+      data-farm="{{item}}"
+    >
+      <view class="farm-info">
+        <view class="farm-name">{{item.farmName}}</view>
+        <view class="farm-codes">
+          <text class="farm-code">站号: {{item.farmCode}}</text>
+          <text class="farm-dhi" wx:if="{{item.dhiCode}}">DHI: {{item.dhiCode}}</text>
+          <text class="farm-dhi-empty" wx:else>DHI编号未设置</text>
+        </view>
+      </view>
+      <view class="farm-action">
+        <text class="check-icon" wx:if="{{currentFarm && currentFarm.farmCode === item.farmCode}}">✓</text>
+        <text class="arrow-icon" wx:else>›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{filteredFarms.length === 0 && !searchKeyword}}">
+    <text class="empty-text">暂无可用牧场</text>
+    <text class="empty-hint">请联系管理员分配牧场权限</text>
+  </view>
+
+  <view class="empty" wx:if="{{filteredFarms.length === 0 && searchKeyword}}">
+    <text class="empty-text">未找到匹配的牧场</text>
+    <text class="empty-hint">请尝试其他关键词</text>
+  </view>
+
+  <view class="tips">
+    <text class="tips-text">* DHI编号用于导出荷斯坦协会版本数据</text>
+    <text class="tips-text">* 如未设置，选择牧场时可以填写</text>
+  </view>
+
+  <!-- 管理员操作 -->
+  <view class="admin-actions" wx:if="{{isAdmin}}">
+    <button class="admin-btn" bindtap="onCreateFarm">
+      + 新建牧场
+    </button>
+  </view>
+</view>
+
+<!-- DHI编号输入弹窗 -->
+<view class="dhi-modal" wx:if="{{showDhiModal}}" bindtap="onCloseDhiModal">
+  <view class="dhi-content" catchtap="onStopPropagation">
+    <view class="dhi-header">
+      <text class="dhi-title">设置DHI编号</text>
+      <text class="dhi-close" bindtap="onCloseDhiModal">×</text>
+    </view>
+    <view class="dhi-body">
+      <text class="dhi-farm-name">{{selectedFarm.farmName}}</text>
+      <text class="dhi-hint">该牧场暂未设置DHI编号，是否现在设置？</text>
+      <text class="dhi-note">（DHI编号用于导出荷斯坦协会格式数据）</text>
+      <input
+        class="dhi-input"
+        type="digit"
+        placeholder="请输入DHI编号（可选）"
+        value="{{dhiCodeInput}}"
+        bindinput="onDhiCodeInput"
+        catchtap="onStopPropagation"
+      />
+    </view>
+    <view class="dhi-footer">
+      <button class="dhi-btn dhi-btn-cancel" catchtap="onSkipDhiCode">暂不设置</button>
+      <button class="dhi-btn dhi-btn-confirm" catchtap="onConfirmDhiCode">确认</button>
+    </view>
+  </view>
+</view>

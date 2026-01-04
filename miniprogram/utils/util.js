@@ -34,7 +34,7 @@ function generateLocalId() {
  * 压缩图片
  * 目标: 200-500KB
  */
-function compressImage(filePath) {
+function compressImage(filePath, options = {}) {
   return new Promise((resolve, reject) => {
     // 先获取图片信息
     wx.getImageInfo({
@@ -42,8 +42,11 @@ function compressImage(filePath) {
       success: (info) => {
         const { width, height } = info
 
-        // 计算目标尺寸（最大边不超过1920）
-        const maxSize = 1920
+        // 默认参数
+        const maxSize = options.maxSize || 1920
+        const quality = options.quality || 60
+
+        // 计算目标尺寸
         let targetWidth = width
         let targetHeight = height
 
@@ -58,7 +61,7 @@ function compressImage(filePath) {
         // 压缩图片
         wx.compressImage({
           src: filePath,
-          quality: 60, // 压缩质量
+          quality: quality, // 压缩质量
           compressedWidth: targetWidth,
           compressedHeight: targetHeight,
           success: (res) => {
@@ -181,10 +184,10 @@ function getGradeColor(grade) {
   const colors = {
     'Ex': '#FFD700', // 金色
     'VG': '#FF6B6B', // 红色
-    'GP': '#4ECDC4', // 青色
-    'G': '#07C160',  // 绿色
-    'F': '#999999',  // 灰色
-    'P': '#666666'   // 深灰
+    'GP': '#278546', // 伊利绿（良好）
+    'G': '#278546',  // 伊利绿（一般）
+    'F': '#5f6464',  // 深灰
+    'P': '#5f6464'   // 深灰
   }
   return colors[grade] || '#999999'
 }

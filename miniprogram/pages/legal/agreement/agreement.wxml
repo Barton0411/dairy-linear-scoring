@@ -1,0 +1,35 @@
+<nav-header title="用户协议" />
+<view class="container">
+  <scroll-view class="scroll" scroll-y>
+    <view class="card">
+      <text class="title">用户协议</text>
+      <text class="meta">更新日期：2025-12-31</text>
+      <text class="p">欢迎使用「奶牛线性评定」。在使用前，请你仔细阅读并同意本协议。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">1. 服务内容</text>
+      <text class="p">本应用用于奶牛线性评定记录、离线保存与联网同步、照片留存与导出。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">2. 账号与权限</text>
+      <text class="p">鉴定员通过微信登录并完成工号验证后使用。管理员/超级管理员拥有额外的管理功能。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">3. 使用规范</text>
+      <text class="p">你应保证录入数据真实、准确，不得上传违法违规内容。因你的操作导致的风险与后果由你自行承担。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">4. 免责声明</text>
+      <text class="p">评定结果仅供业务参考，具体以管理要求与现场复核为准。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">5. 联系方式</text>
+      <text class="p">如需支持与反馈，请联系项目管理员或所属团队负责人。</text>
+    </view>
+  </scroll-view>
+</view>

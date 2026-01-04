@@ -1,0 +1,324 @@
+/* pages/scoring/unified/unified.wxss */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 20rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 顶部信息区 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header.card {
+  margin-bottom: 16rpx;
+}
+
+.cattle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.ear-tag {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.parity {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.score-preview {
+  text-align: right;
+}
+
+.score-value {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #0087cd;
+  line-height: 1;
+}
+
+.score-grade {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  margin-top: 8rpx;
+}
+
+/* 附加评分 */
+.extra-section.card {
+  margin-bottom: 16rpx;
+  padding: 12rpx 30rpx;
+}
+
+.extra-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.extra-row:last-child {
+  border-bottom: none;
+}
+
+.extra-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5f6464;
+}
+
+.value-pill {
+  min-width: 96rpx;
+  height: 52rpx;
+  padding: 0 18rpx;
+  background: #f1f2f3;
+  border-radius: 16rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #0087cd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input.value-pill {
+  background: #f1f2f3;
+  border: none;
+  padding: 0 12rpx;
+  text-align: center;
+}
+
+.value-pill.selectable {
+  color: #0087cd;
+}
+
+/* 类别列表 */
+.category-list {
+  margin-bottom: 16rpx;
+}
+
+.category-section.card {
+  margin-bottom: 16rpx;
+  padding: 0;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.category-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.category-weight {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.modified-count {
+  font-size: 24rpx;
+  color: #ff9500;
+}
+
+/* 性状列表 */
+.traits-container {
+  padding: 0 30rpx;
+}
+
+.trait-item {
+  border-bottom: 1rpx solid #e0edf6;
+  padding: 18rpx 0;
+}
+
+.trait-item:last-child {
+  border-bottom: none;
+}
+
+.trait-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trait-name {
+  font-size: 28rpx;
+  color: #1c1c1e;
+  font-weight: 500;
+}
+
+.trait-name.modified {
+  color: #0087cd;
+}
+
+.trait-score {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #0087cd;
+}
+
+.trait-score.modified {
+  color: #ff9500;
+}
+
+/* 展开评分 */
+.score-buttons {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 10rpx;
+  padding-top: 16rpx;
+}
+
+.score-btn {
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26rpx;
+  font-weight: 600;
+  background: #f1f2f3;
+  color: #5f6464;
+  border-radius: 12rpx;
+}
+
+.score-btn.is-default {
+  background: #e0edf6;
+  color: #0087cd;
+}
+
+.score-btn.active {
+  background: #0087cd;
+  color: #fff;
+}
+
+.score-btn.active.modified {
+  background: #ff9500;
+}
+
+.score-btn:active {
+  opacity: 0.8;
+}
+
+/* 底部操作区 */
+.footer {
+  background: transparent;
+  padding: 0;
+  margin-top: 10rpx;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 24rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.action-btn::after {
+  border: none;
+}
+
+.action-btn.secondary {
+  background: #eef0f2;
+  color: #5f6464;
+}
+
+.action-btn.primary {
+  background: #0087cd;
+  color: #fff;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+/* 性状分数描述 */
+.score-descriptions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8rpx 4rpx 0;
+}
+
+.score-desc {
+  font-size: 22rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+.score-desc-low {
+  text-align: left;
+}
+
+.score-desc-high {
+  text-align: right;
+}
+
+/* 最优值按钮样式 */
+.score-btn.is-optimal {
+  position: relative;
+  border: 2rpx solid #ff9500;
+}
+
+.score-btn.is-optimal .score-number {
+  font-weight: 700;
+  font-size: 28rpx;
+}
+
+.score-btn.is-optimal.active {
+  background: #ff9500;
+  border-color: #ff9500;
+}
+
+/* 最优值星标 */
+.optimal-mark {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  font-size: 24rpx;
+  line-height: 1;
+  filter: drop-shadow(0 0 2rpx rgba(0,0,0,0.3));
+}
+
+.score-btn {
+  flex-direction: column;
+  position: relative;
+  gap: 2rpx;
+}
+
+.score-number {
+  line-height: 1;
+}

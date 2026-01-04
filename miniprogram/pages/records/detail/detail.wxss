@@ -1,0 +1,99 @@
+/* pages/records/detail/detail.wxss */
+
+.container {
+  min-height: 100vh;
+  background: transparent;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.info-card {
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.ear-tag {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.info-meta {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.info-right {
+  text-align: right;
+}
+
+.score-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #0087cd;
+  line-height: 1;
+}
+
+.grade-text {
+  display: block;
+  font-size: 24rpx;
+  color: #0087cd;
+  margin-top: 6rpx;
+}
+
+.trait-card {
+  padding: 24rpx;
+}
+
+.action-area {
+  margin-top: 20rpx;
+}
+
+.trait-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.trait-row:last-child {
+  border-bottom: none;
+}
+
+.trait-name {
+  font-size: 26rpx;
+  color: #1c1c1e;
+}
+
+.trait-score {
+  font-size: 26rpx;
+  color: #0087cd;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100rpx 30rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #5f6464;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

@@ -1,0 +1,3 @@
+<view class="home-button" bindtap="onGoHome">
+  <image class="home-logo" src="/assets/brand/yili-logo.png" mode="aspectFit" />
+</view>
