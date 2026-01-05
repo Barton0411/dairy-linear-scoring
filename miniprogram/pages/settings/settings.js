@@ -16,7 +16,8 @@ Page({
       defaultScores: () => store.settings.defaultScores  // 直接绑定defaultScores
     },
     actions: {
-      updateSettings: 'updateSettings'
+      updateSettings: 'updateSettings',
+      updateUserInfo: 'setUserInfo'
     }
   },
 
@@ -128,9 +129,43 @@ Page({
     this.loadCertificateStatus()
   },
 
-  onShow() {
+  async onShow() {
     // 每次显示时更新乳房空满索引（可能在其他页面修改了）
     this.updateUdderFullnessIndex()
+
+    // 刷新用户信息（可能在管理后台修改了角色）
+    await this.refreshUserInfo()
+  },
+
+  // 刷新用户信息
+  async refreshUserInfo() {
+    try {
+      const latestInfo = await api.getUserInfo()
+
+      // 更新本地缓存
+      const userInfo = wx.getStorageSync('userInfo') || {}
+      const updatedUserInfo = {
+        ...userInfo,
+        role: latestInfo.role,
+        isCertified: latestInfo.isCertified,
+        appraiserName: latestInfo.name
+      }
+
+      wx.setStorageSync('userInfo', updatedUserInfo)
+
+      // 更新 store
+      if (this.updateUserInfo) {
+        this.updateUserInfo(updatedUserInfo)
+      }
+
+      // 更新页面显示
+      const hasAdminAccess = latestInfo.role === 'admin' || latestInfo.role === 'super_admin'
+      this.setData({ isAdmin: hasAdminAccess })
+
+    } catch (err) {
+      console.error('刷新用户信息失败:', err)
+      // 静默失败，不影响页面显示
+    }
   },
 
   // 加载证书状态

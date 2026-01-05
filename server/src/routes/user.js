@@ -9,7 +9,18 @@ const router = express.Router()
 router.get('/info', authMiddleware, async (req, res) => {
   try {
     const [users] = await db.query(
-      'SELECT id, employee_id, appraiser_name, is_certified, avatar_url, created_at FROM users WHERE id = ?',
+      `SELECT
+        u.id,
+        u.employee_id,
+        u.appraiser_name,
+        u.is_certified,
+        u.avatar_url,
+        u.created_at,
+        a.role,
+        a.cert_status
+      FROM users u
+      LEFT JOIN appraisers a ON u.employee_id = a.employee_id
+      WHERE u.id = ?`,
       [req.user.userId]
     )
 
@@ -24,6 +35,8 @@ router.get('/info', authMiddleware, async (req, res) => {
       employeeId: user.employee_id,
       name: user.appraiser_name,
       isCertified: user.is_certified === 1,
+      role: user.role || 'appraiser',
+      certStatus: user.cert_status || 'none',
       avatarUrl: user.avatar_url,
       createdAt: user.created_at
     })
