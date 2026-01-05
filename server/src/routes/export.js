@@ -142,6 +142,25 @@ router.post('/', authMiddleware, async (req, res) => {
       return res.status(404).json({ error: '未找到记录' })
     }
 
+    // 权限检查
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin'
+
+    if (!isAdmin) {
+      // 检查是否所有记录都属于用户有权访问的牧场
+      const farmCodes = [...new Set(records.map(r => r.farm_code))]
+
+      for (const farmCode of farmCodes) {
+        const [farmAccess] = await db.query(
+          'SELECT 1 FROM appraiser_farms WHERE employee_id = ? AND farm_code = ?',
+          [req.user.employeeId, farmCode]
+        )
+
+        if (farmAccess.length === 0) {
+          return res.status(403).json({ error: `无权导出牧场 ${farmCode} 的记录` })
+        }
+      }
+    }
+
     // 检查DHI编号（荷斯坦版本必须）
     if (version === 'holstein') {
       const noDhiRecords = records.filter(r => !r.dhi_code)

@@ -1,19 +1,12 @@
 // src/routes/appraiser.js - 鉴定员管理路由
 const express = require('express')
 const db = require('../config/database')
-const { authMiddleware } = require('../middleware/auth')
+const { authMiddleware, adminOnly, superAdminOnly } = require('../middleware/auth')
 
 const router = express.Router()
 
-// 权限检查中间件 - 仅超级管理员可以管理鉴定员
-const superAdminOnly = (req, res, next) => {
-  // TODO: 实现超级管理员权限检查
-  // 暂时允许所有认证用户访问，后续需要根据用户角色判断
-  next()
-}
-
 // 获取所有鉴定员列表
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, adminOnly, async (req, res) => {
   try {
     const [appraisers] = await db.query(
       `SELECT
@@ -104,11 +97,6 @@ router.put('/:employeeId', authMiddleware, superAdminOnly, async (req, res) => {
       return res.status(404).json({ error: '鉴定员不存在' })
     }
 
-    // 防止修改超级管理员角色
-    if (employeeId === '10075345' && role !== undefined && role !== 'super_admin') {
-      return res.status(403).json({ error: '不能修改超级管理员的角色' })
-    }
-
     // 更新信息
     const updates = []
     const values = []
@@ -159,6 +147,14 @@ router.put('/:employeeId', authMiddleware, superAdminOnly, async (req, res) => {
       )
     }
 
+    // 同步role到users表
+    if (role !== undefined) {
+      await db.query(
+        'UPDATE users SET role = ? WHERE employee_id = ?',
+        [role, employeeId]
+      )
+    }
+
     res.json({
       success: true,
       message: '鉴定员信息更新成功'
@@ -184,11 +180,6 @@ router.delete('/:employeeId', authMiddleware, superAdminOnly, async (req, res) =
 
     if (existing.length === 0) {
       return res.status(404).json({ error: '鉴定员不存在' })
-    }
-
-    // 防止删除超级管理员
-    if (employeeId === '10075345') {
-      return res.status(403).json({ error: '不能删除超级管理员' })
     }
 
     // 检查是否有关联的评分记录

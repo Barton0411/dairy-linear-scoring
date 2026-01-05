@@ -168,7 +168,8 @@ Page({
   // 检查待审批证书
   async checkPendingCertificates() {
     const userInfo = store.userInfo
-    if (!userInfo || userInfo.employeeId !== '10075345') {
+    const isSuperAdmin = userInfo && userInfo.role === 'super_admin'
+    if (!isSuperAdmin) {
       this.setData({ isSuperAdmin: false })
       return
     }

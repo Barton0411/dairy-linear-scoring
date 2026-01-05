@@ -109,6 +109,15 @@ const api = {
     })
   },
 
+  // 解绑账号
+  unbindAccount(openId) {
+    return request({
+      url: '/api/auth/unbind',
+      method: 'POST',
+      data: { openId }
+    })
+  },
+
   getUserInfo() {
     return request({ url: '/api/user/info' })
   },
@@ -273,7 +282,7 @@ const api = {
 
   // 牧场管理（管理员）
   getAllFarms() {
-    return request({ url: '/api/farms?admin=true' })
+    return request({ url: '/api/farms/admin/all' })
   },
 
   createFarm(data) {

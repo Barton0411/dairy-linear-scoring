@@ -1,5 +1,6 @@
 const { storeBindingsBehavior } = require('mobx-miniprogram-bindings')
 const { store } = require('../../store/index')
+const { api } = require('../../utils/request')
 const { showToast } = require('../../utils/util')
 const { updateFarmDhiCode, isAdmin } = require('../../utils/mockData')
 
@@ -19,7 +20,8 @@ Page({
     showDhiModal: false,
     selectedFarm: null,
     dhiCodeInput: '',
-    isAdmin: false
+    isAdmin: false,
+    loading: false
   },
 
   onLoad(options) {
@@ -27,29 +29,55 @@ Page({
   },
 
   onShow() {
-    // 每次显示时刷新列表（从新建牧场页返回时）
-    this.loadFarms()
+    // 每次显示时从服务器刷新牧场列表
+    this.setData({ loading: true })
+    this.loadFarms().finally(() => {
+      this.setData({ loading: false })
+    })
   },
 
-  // 加载牧场列表
-  loadFarms() {
-    const farms = wx.getStorageSync('farms') || []
+  // 加载牧场列表 - 从API刷新
+  async loadFarms() {
     const userInfo = wx.getStorageSync('userInfo')
-    const adminStatus = userInfo ? isAdmin(userInfo.employeeId) : false
+    const adminStatus = userInfo && (userInfo.role === 'admin' || userInfo.role === 'super_admin')
 
-    this.setData({
-      farms,
-      filteredFarms: farms,
-      isAdmin: adminStatus
-    })
+    try {
+      // 调用API获取最新牧场列表
+      const farms = await api.getFarms()
 
-    // 重新应用搜索过滤
-    if (this.data.searchKeyword) {
-      this.filterFarms(this.data.searchKeyword)
-    }
+      // 更新本地缓存和状态
+      wx.setStorageSync('farms', farms)
 
-    if (farms.length === 0) {
-      showToast('暂无可用牧场')
+      this.setData({
+        farms,
+        filteredFarms: farms,
+        isAdmin: adminStatus
+      })
+
+      // 重新应用搜索过滤
+      if (this.data.searchKeyword) {
+        this.filterFarms(this.data.searchKeyword)
+      }
+
+      if (farms.length === 0) {
+        showToast('暂无可用牧场')
+      }
+    } catch (err) {
+      console.error('[farm-select] Load farms error:', err)
+
+      // API失败时降级到缓存数据
+      const cachedFarms = wx.getStorageSync('farms') || []
+      this.setData({
+        farms: cachedFarms,
+        filteredFarms: cachedFarms,
+        isAdmin: adminStatus
+      })
+
+      if (this.data.searchKeyword) {
+        this.filterFarms(this.data.searchKeyword)
+      }
+
+      showToast(err.message || '刷新牧场列表失败，显示缓存数据')
     }
   },
 

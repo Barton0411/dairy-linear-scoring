@@ -63,7 +63,6 @@ Page({
         return
       }
 
-      const role = getAppraiserRole(employeeId)
       const userInfo = {
         openId: wxUserInfo.openId,
         avatarUrl: wxUserInfo.avatarUrl || '',
@@ -71,7 +70,7 @@ Page({
         employeeId: verifyRes.user?.employeeId || employeeId,
         appraiserName: verifyRes.user?.name || name,
         isCertified: verifyRes.user?.isCertified,
-        role
+        role: verifyRes.user?.role || 'appraiser'
       }
 
       const farms = (verifyRes.farms || []).map(farm => ({

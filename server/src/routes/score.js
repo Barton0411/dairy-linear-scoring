@@ -141,6 +141,14 @@ router.get('/:id', authMiddleware, async (req, res) => {
 
     const score = scores[0]
 
+    // 权限检查
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin'
+    const isOwner = score.user_id === req.user.userId
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({ error: '无权查看此评分记录' })
+    }
+
     // 获取照片
     const [photos] = await db.query(
       'SELECT id, oss_url FROM photos WHERE score_id = ?',

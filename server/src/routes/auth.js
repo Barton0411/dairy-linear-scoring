@@ -59,6 +59,14 @@ router.post('/login', async (req, res) => {
 
     // 已认证用户，直接返回token
     if (user.employee_id) {
+      // 获取鉴定员信息（包括role）
+      const [appraisers] = await db.query(
+        'SELECT role FROM appraisers WHERE employee_id = ?',
+        [user.employee_id]
+      )
+
+      const appraiserRole = appraisers.length > 0 ? appraisers[0].role : 'appraiser'
+
       // 获取关联牧场
       const [farms] = await db.query(
         `SELECT DISTINCT f.farm_code, f.farm_name, f.dhi_code
@@ -72,18 +80,21 @@ router.post('/login', async (req, res) => {
         userId: user.id,
         employeeId: user.employee_id,
         appraiserName: user.appraiser_name,
-        isCertified: user.is_certified
+        isCertified: user.is_certified,
+        role: appraiserRole
       })
 
       return res.json({
         isNewUser: false,
         verified: true,
+        openId: openid,
         token,
         user: {
           id: user.id,
           employeeId: user.employee_id,
           name: user.appraiser_name,
-          isCertified: user.is_certified === 1
+          isCertified: user.is_certified === 1,
+          role: appraiserRole
         },
         farms: farms.map(f => ({
           code: f.farm_code,
@@ -128,14 +139,15 @@ router.post('/verify', async (req, res) => {
 
     const appraiser = appraisers[0]
 
-    // 更新用户信息
+    // 更新用户信息（包含role）
     await db.query(
       `UPDATE users SET
         employee_id = ?,
         appraiser_name = ?,
-        is_certified = ?
+        is_certified = ?,
+        role = ?
       WHERE openid = ?`,
-      [employeeId, name, appraiser.is_certified, openId]
+      [employeeId, name, appraiser.is_certified, appraiser.role || 'appraiser', openId]
     )
 
     // 获取用户ID
@@ -161,7 +173,8 @@ router.post('/verify', async (req, res) => {
       userId: users[0].id,
       employeeId: employeeId,
       appraiserName: name,
-      isCertified: appraiser.is_certified
+      isCertified: appraiser.is_certified,
+      role: appraiser.role || 'appraiser'
     })
 
     res.json({
@@ -171,7 +184,8 @@ router.post('/verify', async (req, res) => {
         id: users[0].id,
         employeeId: employeeId,
         name: name,
-        isCertified: appraiser.is_certified === 1
+        isCertified: appraiser.is_certified === 1,
+        role: appraiser.role || 'appraiser'
       },
       farms: farms.map(f => ({
         code: f.farm_code,
@@ -183,6 +197,37 @@ router.post('/verify', async (req, res) => {
   } catch (err) {
     console.error('Verify error:', err)
     res.status(500).json({ error: '认证失败' })
+  }
+})
+
+// 解绑账号（退出登录时调用）
+router.post('/unbind', async (req, res) => {
+  try {
+    const { openId } = req.body
+
+    if (!openId) {
+      return res.status(400).json({ error: '缺少openId参数' })
+    }
+
+    // 清除用户的绑定关系，但保留用户记录
+    await db.query(
+      `UPDATE users SET
+        employee_id = NULL,
+        appraiser_name = NULL,
+        is_certified = 0,
+        role = 'appraiser'
+      WHERE openid = ?`,
+      [openId]
+    )
+
+    res.json({
+      success: true,
+      message: '账号已解绑'
+    })
+
+  } catch (err) {
+    console.error('Unbind error:', err)
+    res.status(500).json({ error: '解绑失败' })
   }
 })
 

@@ -1,19 +1,12 @@
 // src/routes/appraiser-farm.js - 鉴定员-牧场关联关系管理
 const express = require('express')
 const db = require('../config/database')
-const { authMiddleware } = require('../middleware/auth')
+const { authMiddleware, adminOnly } = require('../middleware/auth')
 
 const router = express.Router()
 
-// 权限检查中间件 - 仅管理员/超级管理员可以管理关联关系
-const adminOnly = (req, res, next) => {
-  // TODO: 实现管理员权限检查
-  // 暂时允许所有认证用户访问，后续需要根据用户角色判断
-  next()
-}
-
 // 获取所有鉴定员-牧场关联关系
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, adminOnly, async (req, res) => {
   try {
     const [links] = await db.query(
       `SELECT af.employee_id, af.farm_code, af.created_at,
@@ -42,6 +35,12 @@ router.get('/', authMiddleware, async (req, res) => {
 router.get('/appraiser/:employeeId', authMiddleware, async (req, res) => {
   try {
     const { employeeId } = req.params
+
+    // 检查权限：只能查看自己的或者是管理员
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin'
+    if (!isAdmin && req.user.employeeId !== employeeId) {
+      return res.status(403).json({ error: '无权查看其他鉴定员的牧场' })
+    }
 
     const [farms] = await db.query(
       `SELECT f.farm_code, f.farm_name, f.dhi_code

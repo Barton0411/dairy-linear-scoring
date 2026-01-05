@@ -116,7 +116,7 @@ Page({
     // 检查管理员权限
     const userInfo = wx.getStorageSync('userInfo')
     const role = userInfo?.role
-    const hasAdminAccess = role ? (role === 'admin' || role === 'super_admin') : (userInfo && isAdmin(userInfo.employeeId))
+    const hasAdminAccess = role && (role === 'admin' || role === 'super_admin')
     if (hasAdminAccess) {
       this.setData({ isAdmin: true })
     }
@@ -389,17 +389,34 @@ Page({
   onLogout() {
     wx.showModal({
       title: '确认退出',
-      content: '确定要退出登录吗？',
-      success: (res) => {
+      content: '退出后需要重新验证身份才能登录',
+      success: async (res) => {
         if (res.confirm) {
+          const userInfo = wx.getStorageSync('userInfo')
+          const openId = userInfo?.openId
+
+          showLoading('退出中...')
+
+          // 调用后端解绑接口
+          if (openId) {
+            try {
+              await api.unbindAccount(openId)
+            } catch (err) {
+              console.error('解绑失败:', err)
+              // 即使解绑失败也继续清除本地数据
+            }
+          }
+
           // 清除登录信息
           wx.removeStorageSync('userInfo')
           wx.removeStorageSync('currentFarm')
           wx.removeStorageSync('farms')
+          wx.removeStorageSync('token')
 
           // 清除 store
           store.logout()
 
+          hideLoading()
           showToast('已退出登录')
 
           // 跳转到登录页

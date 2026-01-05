@@ -535,11 +535,6 @@ Page({
 
     const { employeeId } = e.currentTarget.dataset
 
-    if (employeeId === '10075345') {
-      showToast('不能删除超级管理员')
-      return
-    }
-
     // 直接提示删除账号，保留数据
     const confirmed = await showConfirm(
       '确认删除',

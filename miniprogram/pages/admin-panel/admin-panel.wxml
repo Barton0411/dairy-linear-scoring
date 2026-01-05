@@ -81,14 +81,13 @@
         </view>
         <view class="farm-manage-actions">
           <button
-            wx:if="{{isSuperAdmin && item.employeeId !== '10075345'}}"
+            wx:if="{{isSuperAdmin}}"
             class="btn-more"
             data-employee-id="{{item.employeeId}}"
             bindtap="onOpenAppraiserActions"
           >
             管理
           </button>
-          <text wx:elif="{{item.employeeId === '10075345'}}" class="super-admin-badge">超级管理员</text>
           <text wx:else class="no-permission">仅超级管理员可编辑和删除</text>
         </view>
       </view>

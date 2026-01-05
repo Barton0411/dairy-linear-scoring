@@ -1,6 +1,5 @@
 // pages/farm-create/farm-create.js
 const { showToast, showLoading, hideLoading, showConfirm } = require('../../utils/util')
-const { isAdmin } = require('../../utils/mockData')
 const { api } = require('../../utils/request')
 
 Page({
@@ -14,7 +13,9 @@ Page({
   onLoad(options) {
     // 验证管理员权限
     const userInfo = wx.getStorageSync('userInfo')
-    if (!userInfo || !isAdmin(userInfo.employeeId)) {
+    const hasAdminAccess = userInfo && (userInfo.role === 'admin' || userInfo.role === 'super_admin')
+
+    if (!hasAdminAccess) {
       showToast('只有管理员可以访问此页面')
       setTimeout(() => {
         wx.navigateBack()

@@ -582,7 +582,12 @@ Page({
 
   // 批量导出
   async onBatchExport() {
-    const { displayRecords } = this.data
+    const { displayRecords, viewMode } = this.data
+
+    if (viewMode === 'allFarms') {
+      showToast('请先选择单个牧场')
+      return
+    }
 
     if (displayRecords.length === 0) {
       showToast('暂无记录可导出')

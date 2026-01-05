@@ -35,8 +35,40 @@ function authMiddleware(req, res, next) {
   }
 }
 
+// 检查管理员或超级管理员权限
+function adminOnly(req, res, next) {
+  const role = req.user?.role
+
+  if (!role || (role !== 'admin' && role !== 'super_admin')) {
+    return res.status(403).json({
+      error: '权限不足：需要管理员权限',
+      requiredRole: 'admin or super_admin',
+      currentRole: role || 'none'
+    })
+  }
+
+  next()
+}
+
+// 检查超级管理员权限
+function superAdminOnly(req, res, next) {
+  const role = req.user?.role
+
+  if (!role || role !== 'super_admin') {
+    return res.status(403).json({
+      error: '权限不足：需要超级管理员权限',
+      requiredRole: 'super_admin',
+      currentRole: role || 'none'
+    })
+  }
+
+  next()
+}
+
 module.exports = {
   generateToken,
   verifyToken,
-  authMiddleware
+  authMiddleware,
+  adminOnly,
+  superAdminOnly
 }

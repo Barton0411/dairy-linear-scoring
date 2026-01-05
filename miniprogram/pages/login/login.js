@@ -7,7 +7,8 @@ const { getAppraiserRole } = require('../../utils/mockData')
 Page({
   data: {
     loading: false,
-    agreed: false
+    agreed: false,
+    avatarUrl: ''
   },
 
   onLoad() {
@@ -23,6 +24,14 @@ Page({
     this.setData({ agreed: e.detail.value.length > 0 })
   },
 
+  // 选择头像后自动登录
+  async onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    this.setData({ avatarUrl })
+    // 选择头像后自动执行登录
+    await this.onWxLogin()
+  },
+
   // 微信登录
   async onWxLogin() {
     if (!this.data.agreed) {
@@ -36,22 +45,6 @@ Page({
     showLoading('登录中...')
 
     try {
-      const sysInfo = wx.getSystemInfoSync()
-      const isDevtools = sysInfo?.platform === 'devtools'
-
-      // 获取微信头像与昵称（需要用户确认授权）
-      const wxProfile = await new Promise((resolve) => {
-        if (!wx.getUserProfile || isDevtools) {
-          resolve(null)
-          return
-        }
-        wx.getUserProfile({
-          desc: '用于展示您的头像与昵称',
-          success: (res) => resolve(res.userInfo || null),
-          fail: () => resolve(null)
-        })
-      })
-
       const code = await new Promise((resolve, reject) => {
         wx.login({
           success: (res) => resolve(res.code),
@@ -62,14 +55,14 @@ Page({
       const loginRes = await api.login(code)
 
       if (loginRes?.verified) {
-        const role = getAppraiserRole(loginRes.user?.employeeId)
         const userInfo = {
           employeeId: loginRes.user?.employeeId,
           appraiserName: loginRes.user?.name,
           isCertified: loginRes.user?.isCertified,
-          role,
-          avatarUrl: wxProfile?.avatarUrl || '',
-          nickName: wxProfile?.nickName || ''
+          role: loginRes.user?.role || 'appraiser',
+          avatarUrl: this.data.avatarUrl || '',
+          nickName: loginRes.user?.name || '',
+          openId: loginRes.openId
         }
 
         const farms = (loginRes.farms || []).map(farm => ({
@@ -102,8 +95,8 @@ Page({
       // 保存临时信息，跳转到身份认证页
       wx.setStorageSync('tempWxUserInfo', {
         openId: loginRes.openId,
-        avatarUrl: wxProfile?.avatarUrl || '',
-        nickName: wxProfile?.nickName || ''
+        avatarUrl: this.data.avatarUrl || '',
+        nickName: ''
       })
 
       hideLoading()

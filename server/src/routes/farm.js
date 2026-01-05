@@ -2,38 +2,13 @@
 const express = require('express')
 const ExcelJS = require('exceljs')
 const db = require('../config/database')
-const { authMiddleware } = require('../middleware/auth')
+const { authMiddleware, adminOnly } = require('../middleware/auth')
 
 const router = express.Router()
 
-// 权限检查中间件 - 仅管理员/超级管理员可以管理牧场
-const adminOnly = (req, res, next) => {
-  // TODO: 实现管理员权限检查
-  // 暂时允许所有认证用户访问，后续需要根据用户角色判断
-  next()
-}
-
-// 获取用户关联的牧场列表
+// 获取当前用户关联的牧场列表
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    // 如果有admin参数，返回所有牧场（管理后台使用）
-    if (req.query.admin === 'true') {
-      const [allFarms] = await db.query(
-        `SELECT farm_code, farm_name, dhi_code, created_at, updated_at
-         FROM farms
-         ORDER BY created_at DESC`
-      )
-
-      return res.json(allFarms.map(f => ({
-        farmCode: f.farm_code,
-        farmName: f.farm_name,
-        dhiCode: f.dhi_code || '',
-        createdAt: f.created_at,
-        updatedAt: f.updated_at
-      })))
-    }
-
-    // 否则返回用户关联的牧场
     const [farms] = await db.query(
       `SELECT DISTINCT f.farm_code, f.farm_name, f.dhi_code
        FROM appraiser_farms af
@@ -51,6 +26,29 @@ router.get('/', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('Get farms error:', err)
     res.status(500).json({ error: '获取牧场列表失败' })
+  }
+})
+
+// 获取所有牧场列表（管理员）
+router.get('/admin/all', authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const [allFarms] = await db.query(
+      `SELECT farm_code, farm_name, dhi_code, created_at, updated_at
+       FROM farms
+       ORDER BY created_at DESC`
+    )
+
+    res.json(allFarms.map(f => ({
+      farmCode: f.farm_code,
+      farmName: f.farm_name,
+      dhiCode: f.dhi_code || '',
+      createdAt: f.created_at,
+      updatedAt: f.updated_at
+    })))
+
+  } catch (err) {
+    console.error('Get all farms error:', err)
+    res.status(500).json({ error: '获取所有牧场失败' })
   }
 })
 
@@ -126,6 +124,21 @@ router.get('/:code/scores', authMiddleware, async (req, res) => {
     const { code } = req.params
     const { page = 1, limit = 20, startDate, endDate } = req.query
     const offset = (page - 1) * limit
+
+    // 权限检查：检查是否被分配到该牧场或是管理员
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin'
+
+    if (!isAdmin) {
+      // 检查是否被分配到该牧场
+      const [farmAccess] = await db.query(
+        'SELECT 1 FROM appraiser_farms WHERE employee_id = ? AND farm_code = ?',
+        [req.user.employeeId, code]
+      )
+
+      if (farmAccess.length === 0) {
+        return res.status(403).json({ error: '无权查看此牧场的评分记录' })
+      }
+    }
 
     let sql = 'SELECT * FROM scores WHERE farm_code = ?'
     const params = [code]

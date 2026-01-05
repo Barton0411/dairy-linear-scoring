@@ -5,7 +5,7 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const db = require('../config/database')
 const ossClient = require('../config/oss')
-const { authMiddleware } = require('../middleware/auth')
+const { authMiddleware, superAdminOnly } = require('../middleware/auth')
 
 const router = express.Router()
 
@@ -165,19 +165,19 @@ router.get('/status', authMiddleware, async (req, res) => {
 })
 
 // 3. POST /review - 审批证书（仅超级管理员）
-router.post('/review', authMiddleware, async (req, res) => {
+router.post('/review', authMiddleware, superAdminOnly, async (req, res) => {
   try {
     const { applicationId, action, rejectReason } = req.body
     const reviewerId = req.user.userId
 
-    // 检查是否为超级管理员
+    // 获取审批人信息
     const [reviewer] = await db.query(
       'SELECT employee_id, appraiser_name FROM users WHERE id = ?',
       [reviewerId]
     )
 
-    if (!reviewer.length || reviewer[0].employee_id !== '10075345') {
-      return res.status(403).json({ error: '仅超级管理员可以审批证书' })
+    if (!reviewer.length) {
+      return res.status(400).json({ error: '审批人信息不存在' })
     }
 
     if (!applicationId || !action) {
@@ -273,20 +273,8 @@ router.post('/review', authMiddleware, async (req, res) => {
 })
 
 // 4. GET /pending - 获取待审批证书列表（仅超级管理员）
-router.get('/pending', authMiddleware, async (req, res) => {
+router.get('/pending', authMiddleware, superAdminOnly, async (req, res) => {
   try {
-    const userId = req.user.userId
-
-    // 检查是否为超级管理员
-    const [user] = await db.query(
-      'SELECT employee_id FROM users WHERE id = ?',
-      [userId]
-    )
-
-    if (!user.length || user[0].employee_id !== '10075345') {
-      return res.status(403).json({ error: '仅超级管理员可以查看待审批列表' })
-    }
-
     // 获取所有pending状态的申请
     const [applications] = await db.query(
       `SELECT id, employee_id, appraiser_name, oss_url, file_size, created_at
@@ -321,21 +309,11 @@ router.get('/:employeeId', authMiddleware, async (req, res) => {
     const { employeeId } = req.params
     const userId = req.user.userId
 
-    // 获取当前用户信息
-    const [currentUser] = await db.query(
-      'SELECT employee_id FROM users WHERE id = ?',
-      [userId]
-    )
+    // 检查权限：管理员/超级管理员或本人
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin'
+    const isSelf = req.user.employeeId === employeeId
 
-    if (!currentUser.length) {
-      return res.status(403).json({ error: '用户信息不存在' })
-    }
-
-    // 检查权限：超级管理员或本人
-    const isSuperAdmin = currentUser[0].employee_id === '10075345'
-    const isSelf = currentUser[0].employee_id === employeeId
-
-    if (!isSuperAdmin && !isSelf) {
+    if (!isAdmin && !isSelf) {
       return res.status(403).json({ error: '无权查看该鉴定员的证书' })
     }
 
