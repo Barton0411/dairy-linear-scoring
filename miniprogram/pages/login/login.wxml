@@ -13,7 +13,7 @@
       bindchooseavatar="onChooseAvatar"
       disabled="{{loading || !agreed}}"
     >
-      微信一键登录
+      登录认证
     </button>
 
     <button class="btn-preview" bindtap="onPreview">
