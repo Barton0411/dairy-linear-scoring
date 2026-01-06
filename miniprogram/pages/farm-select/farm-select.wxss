@@ -209,6 +209,13 @@
   font-size: 28rpx;
   font-weight: 600;
   color: #0087cd;
+  margin-bottom: 8rpx;
+}
+
+.dhi-farm-code {
+  display: block;
+  font-size: 24rpx;
+  color: #5f6464;
   margin-bottom: 20rpx;
 }
 

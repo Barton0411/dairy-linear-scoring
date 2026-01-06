@@ -11,7 +11,7 @@
       <text class="search-icon">🔍</text>
       <input
         class="search-input"
-        placeholder="搜索牧场名称或站号"
+        placeholder="搜索牧场名称或伊起牛站号"
         value="{{searchKeyword}}"
         bindinput="onSearchInput"
         bindconfirm="onSearchConfirm"
@@ -29,11 +29,10 @@
       data-farm="{{item}}"
     >
       <view class="farm-info">
-        <view class="farm-name">{{item.farmName}}</view>
+        <view class="farm-name">{{item.farmName || item.name || '未命名牧场'}}</view>
         <view class="farm-codes">
-          <text class="farm-code">站号: {{item.farmCode}}</text>
-          <text class="farm-dhi" wx:if="{{item.dhiCode}}">DHI: {{item.dhiCode}}</text>
-          <text class="farm-dhi-empty" wx:else>DHI编号未设置</text>
+          <text class="farm-code">伊起牛站号: {{item.farmCode || item.code}}</text>
+          <text class="farm-dhi" wx:if="{{item.dhiCode}}"> | DHI: {{item.dhiCode}}</text>
         </view>
       </view>
       <view class="farm-action">
@@ -74,7 +73,8 @@
       <text class="dhi-close" bindtap="onCloseDhiModal">×</text>
     </view>
     <view class="dhi-body">
-      <text class="dhi-farm-name">{{selectedFarm.farmName}}</text>
+      <text class="dhi-farm-name">{{selectedFarm.farmName || selectedFarm.name || '未命名牧场'}}</text>
+      <text class="dhi-farm-code">伊起牛站号: {{selectedFarm.farmCode || selectedFarm.code}}</text>
       <text class="dhi-hint">该牧场暂未设置DHI编号，是否现在设置？</text>
       <text class="dhi-note">（DHI编号用于导出荷斯坦协会格式数据）</text>
       <input
