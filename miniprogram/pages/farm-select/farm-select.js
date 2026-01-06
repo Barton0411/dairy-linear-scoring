@@ -116,8 +116,9 @@ Page({
 
     const searchKey = keyword.toLowerCase().trim()
     const filtered = farms.filter(farm => {
-      const farmName = (farm.farmName || '').toLowerCase()
-      const farmCode = (farm.farmCode || '').toLowerCase()
+      // 兼容新旧字段名
+      const farmName = (farm.farmName || farm.name || '').toLowerCase()
+      const farmCode = (farm.farmCode || farm.code || '').toLowerCase()
       const dhiCode = (farm.dhiCode || '').toLowerCase()
 
       return farmName.includes(searchKey) ||
@@ -160,13 +161,17 @@ Page({
       return
     }
 
+    // 兼容新旧字段名
+    const farmCode = selectedFarm.farmCode || selectedFarm.code
+
     // 更新牧场DHI编号
-    const result = updateFarmDhiCode(selectedFarm.farmCode, dhiCodeInput)
+    const result = updateFarmDhiCode(farmCode, dhiCodeInput)
 
     if (result.success) {
       // 更新本地牧场列表
       const farms = this.data.farms.map(f => {
-        if (f.farmCode === selectedFarm.farmCode) {
+        const fCode = f.farmCode || f.code
+        if (fCode === farmCode) {
           return { ...f, dhiCode: dhiCodeInput }
         }
         return f
@@ -216,8 +221,15 @@ Page({
 
   // 确认选择牧场
   confirmSelectFarm(farm) {
-    this.setCurrentFarm(farm)
-    showToast('已选择：' + farm.farmName)
+    // 兼容新旧字段名
+    const normalizedFarm = {
+      farmCode: farm.farmCode || farm.code,
+      farmName: farm.farmName || farm.name,
+      dhiCode: farm.dhiCode || ''
+    }
+
+    this.setCurrentFarm(normalizedFarm)
+    showToast('已选择：' + normalizedFarm.farmName)
 
     // 返回上一页
     setTimeout(() => {
