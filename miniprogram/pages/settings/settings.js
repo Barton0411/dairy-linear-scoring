@@ -430,16 +430,33 @@ Page({
           const userInfo = wx.getStorageSync('userInfo')
           const openId = userInfo?.openId
 
+          console.log('[Logout] 开始退出登录')
+          console.log('[Logout] userInfo:', JSON.stringify(userInfo))
+          console.log('[Logout] openId:', openId)
+
           showLoading('退出中...')
 
           // 调用后端解绑接口
+          let unbindSuccess = false
           if (openId) {
             try {
-              await api.unbindAccount(openId)
+              const unbindRes = await api.unbindAccount(openId)
+              console.log('[Logout] 解绑成功:', unbindRes)
+              unbindSuccess = true
             } catch (err) {
-              console.error('解绑失败:', err)
-              // 即使解绑失败也继续清除本地数据
+              console.error('[Logout] 解绑失败:', err)
+              console.error('[Logout] 错误详情:', err.message, err.response)
+
+              // 如果是网络错误，提示用户但仍然清除本地数据
+              if (err.errMsg && err.errMsg.includes('request:fail')) {
+                console.warn('[Logout] 网络错误，清除本地数据但服务器可能未解绑')
+              } else {
+                // 其他错误也继续
+                console.warn('[Logout] 解绑接口返回错误，继续清除本地数据')
+              }
             }
+          } else {
+            console.warn('[Logout] openId 不存在，无法调用解绑接口')
           }
 
           // 清除登录信息
@@ -452,7 +469,14 @@ Page({
           store.logout()
 
           hideLoading()
-          showToast('已退出登录')
+
+          if (unbindSuccess) {
+            showToast('已退出登录')
+          } else {
+            showToast('已退出（本地）')
+          }
+
+          console.log('[Logout] 退出完成，跳转到登录页')
 
           // 跳转到登录页
           setTimeout(() => {

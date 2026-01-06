@@ -59,6 +59,8 @@ router.post('/login', async (req, res) => {
 
     // 已认证用户，直接返回token
     if (user.employee_id) {
+      console.log(`[Login] 用户已绑定，employeeId: ${user.employee_id}, name: ${user.appraiser_name}`)
+
       // 获取鉴定员信息（包括role）
       const [appraisers] = await db.query(
         'SELECT role FROM appraisers WHERE employee_id = ?',
@@ -105,6 +107,7 @@ router.post('/login', async (req, res) => {
     }
 
     // 用户存在但未认证
+    console.log(`[Login] 用户未绑定，需要验证身份，openId: ${openid}`)
     return res.json({
       isNewUser: false,
       verified: false,
@@ -206,28 +209,53 @@ router.post('/unbind', async (req, res) => {
     const { openId } = req.body
 
     if (!openId) {
+      console.error('[Unbind] 缺少openId参数')
       return res.status(400).json({ error: '缺少openId参数' })
     }
 
+    console.log(`[Unbind] 开始解绑账号，openId: ${openId}`)
+
+    // 先查询用户是否存在
+    const [users] = await db.query(
+      'SELECT id, employee_id, appraiser_name FROM users WHERE openid = ?',
+      [openId]
+    )
+
+    if (users.length === 0) {
+      console.error(`[Unbind] 用户不存在，openId: ${openId}`)
+      return res.status(404).json({ error: '用户不存在' })
+    }
+
+    const user = users[0]
+    console.log(`[Unbind] 找到用户，userId: ${user.id}, employeeId: ${user.employee_id}, name: ${user.appraiser_name}`)
+
     // 清除用户的绑定关系，但保留用户记录
-    await db.query(
+    const [result] = await db.query(
       `UPDATE users SET
         employee_id = NULL,
         appraiser_name = NULL,
-        is_certified = 0,
-        role = 'appraiser'
+        is_certified = 0
       WHERE openid = ?`,
       [openId]
     )
 
+    console.log(`[Unbind] 解绑成功，影响行数: ${result.affectedRows}`)
+
     res.json({
       success: true,
-      message: '账号已解绑'
+      message: '账号已解绑',
+      unboundUser: {
+        employeeId: user.employee_id,
+        name: user.appraiser_name
+      }
     })
 
   } catch (err) {
-    console.error('Unbind error:', err)
-    res.status(500).json({ error: '解绑失败' })
+    console.error('[Unbind] 解绑失败:', err)
+    res.status(500).json({
+      error: '解绑失败',
+      details: err.message
+    })
   }
 })
 
