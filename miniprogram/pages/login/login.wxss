@@ -60,7 +60,8 @@
 
 .btn-preview {
   width: 100%;
-  height: 96rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   background: transparent;
   border-radius: 24rpx;
   border: 2rpx solid #0087cd;
@@ -68,6 +69,10 @@
   font-size: 32rpx;
   font-weight: 600;
   margin-top: 24rpx;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-preview::after {
