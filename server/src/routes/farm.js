@@ -18,8 +18,8 @@ router.get('/', authMiddleware, async (req, res) => {
     )
 
     res.json(farms.map(f => ({
-      code: f.farm_code,
-      name: f.farm_name,
+      farmCode: f.farm_code,
+      farmName: f.farm_name,
       dhiCode: f.dhi_code || ''
     })))
 
