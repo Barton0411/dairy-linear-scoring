@@ -9,11 +9,15 @@
   <view class="actions">
     <button
       class="btn-login"
-      bindtap="onWxLogin"
-      loading="{{loading}}"
+      open-type="chooseAvatar"
+      bindchooseavatar="onChooseAvatar"
       disabled="{{loading || !agreed}}"
     >
       微信一键登录
+    </button>
+
+    <button class="btn-preview" bindtap="onPreview">
+      先看看功能介绍
     </button>
 
     <view class="agreement-card">

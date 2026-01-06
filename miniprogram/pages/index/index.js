@@ -22,19 +22,13 @@ Page({
   },
 
   onLoad() {
-    if (!this.data.isLoggedIn) {
-      wx.redirectTo({ url: '/pages/login/login' })
-      return
+    // 允许游客浏览首页
+    if (this.data.isLoggedIn) {
+      // 已登录用户加载数据
+      this.loadCurrentFarm()
+      this.loadOfflineScores()
+      this.updatePendingSyncCount()
     }
-
-    // 加载牧场信息
-    this.loadCurrentFarm()
-
-    // 加载离线评分列表
-    this.loadOfflineScores()
-
-    // 更新待同步数量
-    this.updatePendingSyncCount()
   },
 
   onShow() {
@@ -86,8 +80,36 @@ Page({
     this.setData({ showOfflineList: !this.data.showOfflineList })
   },
 
+  // 检查登录状态
+  checkLoginStatus() {
+    if (!this.data.isLoggedIn) {
+      wx.showModal({
+        title: '需要登录',
+        content: '此功能需要登录后才能使用',
+        confirmText: '去登录',
+        cancelText: '稍后',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/login/login' })
+          }
+        }
+      })
+      return false
+    }
+    return true
+  },
+
+  // 点击用户信息区域
+  onUserInfoTap() {
+    if (!this.data.isLoggedIn) {
+      // 未登录时跳转到登录页
+      wx.navigateTo({ url: '/pages/login/login' })
+    }
+  },
+
   // 选择牧场
   onSelectFarm() {
+    if (!this.checkLoginStatus()) return
     wx.navigateTo({ url: '/pages/farm-select/farm-select' })
   },
 
@@ -98,6 +120,7 @@ Page({
 
   // 开始评分
   onStartScoring() {
+    if (!this.checkLoginStatus()) return
     if (!this.data.currentFarm) {
       showToast('请先选择牧场')
       return
@@ -137,6 +160,7 @@ Page({
 
   // 查看评分记录
   onViewRecords() {
+    if (!this.checkLoginStatus()) return
     wx.switchTab({ url: '/pages/records/list/list' })
   },
 

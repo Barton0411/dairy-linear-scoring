@@ -3,7 +3,7 @@
 <view class="container">
   <!-- 用户信息 -->
   <view class="user-card card">
-    <view class="user-info">
+    <view class="user-info" bindtap="onUserInfoTap">
       <view class="avatar">
         <image
           wx:if="{{userInfo && userInfo.avatarUrl}}"
@@ -11,12 +11,15 @@
           src="{{userInfo.avatarUrl}}"
           mode="aspectFill"
         />
-        <text wx:else class="avatar-text">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName.charAt(0) : '鉴'}}</text>
+        <text wx:else class="avatar-text">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName.charAt(0) : '游'}}</text>
       </view>
       <view class="user-detail">
-        <text class="nickname">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName : '鉴定员'}}</text>
-        <text class="role">
+        <text class="nickname">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName : '未登录'}}</text>
+        <text class="role" wx:if="{{isLoggedIn}}">
           {{(userInfo && userInfo.role === 'super_admin') ? '超级管理员' : ((userInfo && userInfo.role === 'admin') ? '管理员' : '鉴定员')}} · {{userInfo && userInfo.isCertified ? '奶协认证鉴定员' : '未认证鉴定员'}}
+        </text>
+        <text class="role guest-hint" wx:else>
+          点击登录以使用完整功能
         </text>
       </view>
     </view>
@@ -39,14 +42,14 @@
   <view class="farm-card card" bindtap="onSelectFarm">
     <view class="farm-header">
       <text class="farm-label">当前牧场</text>
-      <text class="farm-action">切换 ›</text>
+      <text class="farm-action">{{isLoggedIn ? '切换 ›' : '需要登录'}}</text>
     </view>
     <view class="farm-name" wx:if="{{currentFarm}}">
       <text class="name">{{currentFarm.farmName}}</text>
       <text class="code">编号: {{currentFarm.farmCode}}</text>
     </view>
     <view class="farm-empty" wx:else>
-      <text>点击选择牧场</text>
+      <text>{{isLoggedIn ? '点击选择牧场' : '请先登录'}}</text>
     </view>
   </view>
 

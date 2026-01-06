@@ -46,6 +46,11 @@ Page({
     this.loadRecords()
   },
 
+  // 跳转到登录页
+  onGotoLogin() {
+    wx.navigateTo({ url: '/pages/login/login' })
+  },
+
   // 加载记录
   async loadRecords() {
     this.setData({ loading: true })
@@ -53,9 +58,14 @@ Page({
     try {
       const effectiveUserInfo = this.data.userInfo || wx.getStorageSync('userInfo')
       if (!effectiveUserInfo || !effectiveUserInfo.employeeId) {
-        this.setData({ loading: false })
-        showToast('请先登录')
-        wx.reLaunch({ url: '/pages/login/login' })
+        // 未登录时不加载数据，但允许查看页面
+        this.setData({
+          loading: false,
+          allRecords: [],
+          displayRecords: [],
+          groupedRecords: [],
+          stats: { total: 0, mine: 0, offline: 0 }
+        })
         return
       }
 

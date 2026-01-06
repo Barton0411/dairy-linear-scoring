@@ -282,6 +282,12 @@
   color: #979797;
 }
 
+.login-hint {
+  color: #0087cd;
+  text-decoration: underline;
+  margin-top: 20rpx;
+}
+
 /* 加载更多/加载中 */
 .load-more,
 .loading {

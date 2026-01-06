@@ -81,7 +81,7 @@
     </view>
 
     <view class="tool-actions">
-      <button class="tool-btn" bindtap="onBatchExport">
+      <button class="tool-btn" bindtap="onBatchExport" disabled="{{viewMode === 'allFarms' || displayRecords.length === 0}}">
         批量导出
       </button>
       <button class="tool-btn primary" bindtap="onSyncOffline" disabled="{{stats.offline === 0}}">
@@ -109,8 +109,10 @@
       </view>
 
       <view class="empty-state" wx:if="{{groupedRecords.length === 0 && !loading}}">
-        <text class="empty-text">暂无评分记录</text>
-        <text class="empty-hint">开始评分后记录将显示在这里</text>
+        <text class="empty-text" wx:if="{{userInfo && userInfo.employeeId}}">暂无评分记录</text>
+        <text class="empty-text" wx:else>请先登录</text>
+        <text class="empty-hint" wx:if="{{userInfo && userInfo.employeeId}}">开始评分后记录将显示在这里</text>
+        <text class="empty-hint login-hint" wx:else bindtap="onGotoLogin">点击此处登录</text>
       </view>
     </block>
 
@@ -130,8 +132,10 @@
       </view>
 
       <view class="empty-state" wx:if="{{displayRecords.length === 0 && !loading}}">
-        <text class="empty-text">暂无评分记录</text>
-        <text class="empty-hint">该牧场暂无记录</text>
+        <text class="empty-text" wx:if="{{userInfo && userInfo.employeeId}}">暂无评分记录</text>
+        <text class="empty-text" wx:else>请先登录</text>
+        <text class="empty-hint" wx:if="{{userInfo && userInfo.employeeId}}">该牧场暂无记录</text>
+        <text class="empty-hint login-hint" wx:else bindtap="onGotoLogin">点击此处登录</text>
       </view>
     </block>
 

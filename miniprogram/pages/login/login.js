@@ -19,6 +19,11 @@ Page({
     }
   },
 
+  // 预览功能（不登录直接进入首页）
+  onPreview() {
+    wx.switchTab({ url: '/pages/index/index' })
+  },
+
   // 同意协议
   onAgreeChange(e) {
     this.setData({ agreed: e.detail.value.length > 0 })

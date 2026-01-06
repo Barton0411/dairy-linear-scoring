@@ -81,6 +81,11 @@
   margin-top: 8rpx;
 }
 
+.guest-hint {
+  color: #ff9800;
+  font-weight: 500;
+}
+
 /* 证书通知横幅 */
 .cert-notification {
   margin: 20rpx 0;
