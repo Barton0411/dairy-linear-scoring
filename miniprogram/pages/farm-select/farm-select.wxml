@@ -33,6 +33,7 @@
         <view class="farm-codes">
           <text class="farm-code">伊起牛站号: {{item.farmCode || item.code}}</text>
           <text class="farm-dhi" wx:if="{{item.dhiCode}}"> | DHI: {{item.dhiCode}}</text>
+          <text class="farm-dhi-empty" wx:else> | DHI编号未设置</text>
         </view>
       </view>
       <view class="farm-action">
