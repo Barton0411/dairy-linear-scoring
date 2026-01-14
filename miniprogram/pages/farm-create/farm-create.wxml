@@ -1,0 +1,58 @@
+<!--pages/farm-create/farm-create.wxml-->
+<nav-header title="新建牧场" />
+<view class="container">
+  <view class="header">
+    <text class="title">新建牧场</text>
+    <text class="subtitle">填写牧场基本信息</text>
+  </view>
+
+  <view class="form-card">
+    <view class="form-group">
+      <text class="form-label required">牧场名称</text>
+      <input
+        class="form-input"
+        placeholder="请输入牧场名称"
+        value="{{farmName}}"
+        bindinput="onFarmNameInput"
+        maxlength="50"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label required">伊起牛站号</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入站号（如YQN001）"
+        value="{{farmCode}}"
+        bindinput="onFarmCodeInput"
+        maxlength="20"
+      />
+      <text class="form-hint">* 站号必须唯一，建议格式：YQN001</text>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">DHI编号</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入DHI编号（可选）"
+        value="{{dhiCode}}"
+        bindinput="onDhiCodeInput"
+        maxlength="20"
+      />
+      <text class="form-hint">* DHI编号用于导出荷斯坦协会版本数据</text>
+    </view>
+  </view>
+
+  <view class="action-area">
+    <button
+      class="btn-primary"
+      bindtap="onSubmit"
+      loading="{{loading}}"
+      disabled="{{loading || !farmName || !farmCode}}"
+    >
+      创建牧场
+    </button>
+  </view>
+</view>

@@ -1,0 +1,23 @@
+<view wx:if="{{visible}}" class="diagram-mask" bindtap="onClose">
+  <view class="diagram-content" catchtap="onContentTap">
+    <view class="diagram-header">
+      <text class="diagram-title">{{traitName}}</text>
+      <view class="close-btn" catchtap="onClose">×</view>
+    </view>
+    <scroll-view class="diagram-scroll" scroll-y>
+      <image
+        wx:if="{{!imageError}}"
+        class="diagram-image"
+        src="{{imagePath}}"
+        mode="widthFix"
+        show-menu-by-longpress="{{true}}"
+        binderror="onImageError"
+        bindload="onImageLoad"
+      />
+      <view wx:if="{{imageError}}" class="error-message">
+        <text>⚠️ 图片加载失败</text>
+        <text class="error-path">{{imagePath}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

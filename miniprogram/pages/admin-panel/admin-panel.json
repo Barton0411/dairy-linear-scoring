@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "管理后台",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
+,
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

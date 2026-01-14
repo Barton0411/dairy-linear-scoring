@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>前端原型预览</title>
+  <style>
+    :root {
+      --bg: #f2f8fb;
+      --card: #fff;
+      --text: #1c1c1e;
+      --muted: #5f6464;
+      --line: #e0edf6;
+      --brand: #0087cd;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: rgba(242,248,251,0.9);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 20px;
+      z-index: 10;
+    }
+    header h1 { margin: 0; font-size: 18px; }
+    header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      padding: 18px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0,0,0,0.10); }
+    .thumb { width: 100%; height: auto; display: block; background: #fff; }
+    .meta {
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .title { font-size: 14px; font-weight: 600; }
+    .open { font-size: 12px; color: var(--brand); text-decoration: none; white-space: nowrap; }
+    .open:hover { text-decoration: underline; }
+    .hint {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 18px 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>前端原型预览（静态）</h1>
+  <p>点击缩略图打开大图。此原型用于确认布局/文案/层级与跳转结构，不依赖 DevTools。</p>
+</header>
+<div class="hint">确认方式建议：你每次回复我“通过/修改点”（按卡片标题），我就按你的反馈改下一版并重新生成整套图。原型图由 `docs/prototypes/generate.py` 统一生成，保证和当前 UI 版本一致。<a class="open" href="compare/index.html" target="_blank">查看对比图</a></div>
+<div class="grid">
+
+  <div class="card">
+    <a href="pages/login.png" target="_blank">
+      <img class="thumb" src="pages/login.png" alt="登录" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">登录</div>
+      <a class="open" href="pages/login.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/login--disabled.png" target="_blank">
+      <img class="thumb" src="pages/login--disabled.png" alt="登录（未勾选协议-禁用态）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">登录（未勾选协议-禁用态）</div>
+      <a class="open" href="pages/login--disabled.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/verify.png" target="_blank">
+      <img class="thumb" src="pages/verify.png" alt="身份认证" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">身份认证</div>
+      <a class="open" href="pages/verify.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/agreement.png" target="_blank">
+      <img class="thumb" src="pages/agreement.png" alt="用户协议" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">用户协议</div>
+      <a class="open" href="pages/agreement.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/privacy.png" target="_blank">
+      <img class="thumb" src="pages/privacy.png" alt="隐私政策" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">隐私政策</div>
+      <a class="open" href="pages/privacy.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/home.png" target="_blank">
+      <img class="thumb" src="pages/home.png" alt="首页" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">首页</div>
+      <a class="open" href="pages/home.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/farm-select.png" target="_blank">
+      <img class="thumb" src="pages/farm-select.png" alt="选择牧场" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">选择牧场</div>
+      <a class="open" href="pages/farm-select.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/farm-create.png" target="_blank">
+      <img class="thumb" src="pages/farm-create.png" alt="新增牧场" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">新增牧场</div>
+      <a class="open" href="pages/farm-create.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/info.png" target="_blank">
+      <img class="thumb" src="pages/info.png" alt="牛只信息" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">牛只信息</div>
+      <a class="open" href="pages/info.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/unified.png" target="_blank">
+      <img class="thumb" src="pages/unified.png" alt="评分" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">评分</div>
+      <a class="open" href="pages/unified.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/diagram-modal.png" target="_blank">
+      <img class="thumb" src="pages/diagram-modal.png" alt="性状示意图弹窗" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">性状示意图弹窗</div>
+      <a class="open" href="pages/diagram-modal.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/diagram-modal--loaded.png" target="_blank">
+      <img class="thumb" src="pages/diagram-modal--loaded.png" alt="性状示意图弹窗（已加载态）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">性状示意图弹窗（已加载态）</div>
+      <a class="open" href="pages/diagram-modal--loaded.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/photo.png" target="_blank">
+      <img class="thumb" src="pages/photo.png" alt="拍照" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">拍照</div>
+      <a class="open" href="pages/photo.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/photo--with-images.png" target="_blank">
+      <img class="thumb" src="pages/photo--with-images.png" alt="拍照（已选照片态）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">拍照（已选照片态）</div>
+      <a class="open" href="pages/photo--with-images.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/result.png" target="_blank">
+      <img class="thumb" src="pages/result.png" alt="评分结果" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">评分结果</div>
+      <a class="open" href="pages/result.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/records-list.png" target="_blank">
+      <img class="thumb" src="pages/records-list.png" alt="记录列表" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">记录列表</div>
+      <a class="open" href="pages/records-list.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/records-detail.png" target="_blank">
+      <img class="thumb" src="pages/records-detail.png" alt="记录详情" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">记录详情</div>
+      <a class="open" href="pages/records-detail.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/records--export-sheet.png" target="_blank">
+      <img class="thumb" src="pages/records--export-sheet.png" alt="记录导出（版本选择）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">记录导出（版本选择）</div>
+      <a class="open" href="pages/records--export-sheet.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/records--export-path.png" target="_blank">
+      <img class="thumb" src="pages/records--export-path.png" alt="记录导出（DevTools 路径提示）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">记录导出（DevTools 路径提示）</div>
+      <a class="open" href="pages/records--export-path.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/settings.png" target="_blank">
+      <img class="thumb" src="pages/settings.png" alt="设置" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">设置</div>
+      <a class="open" href="pages/settings.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/settings--trait-defaults-1.png" target="_blank">
+      <img class="thumb" src="pages/settings--trait-defaults-1.png" alt="设置（性状默认分-1）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">设置（性状默认分-1）</div>
+      <a class="open" href="pages/settings--trait-defaults-1.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/settings--trait-defaults-2.png" target="_blank">
+      <img class="thumb" src="pages/settings--trait-defaults-2.png" alt="设置（性状默认分-2）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">设置（性状默认分-2）</div>
+      <a class="open" href="pages/settings--trait-defaults-2.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/settings--threshold.png" target="_blank">
+      <img class="thumb" src="pages/settings--threshold.png" alt="设置（分数阈值-展开态）" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">设置（分数阈值-展开态）</div>
+      <a class="open" href="pages/settings--threshold.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/team-info.png" target="_blank">
+      <img class="thumb" src="pages/team-info.png" alt="团队信息" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">团队信息</div>
+      <a class="open" href="pages/team-info.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/admin-panel.png" target="_blank">
+      <img class="thumb" src="pages/admin-panel.png" alt="管理后台" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">管理后台</div>
+      <a class="open" href="pages/admin-panel.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <a href="pages/test-diagram.png" target="_blank">
+      <img class="thumb" src="pages/test-diagram.png" alt="测试示意图" loading="lazy" />
+    </a>
+    <div class="meta">
+      <div class="title">测试示意图</div>
+      <a class="open" href="pages/test-diagram.png" target="_blank">打开大图</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>对比图预览</title>
+  <style>
+    :root {
+      --bg: #f2f8fb;
+      --card: #fff;
+      --text: #1c1c1e;
+      --muted: #5f6464;
+      --line: #e0edf6;
+      --brand: #0087cd;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: rgba(242,248,251,0.9);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 20px;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { margin: 0; font-size: 18px; }
+    header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .back {
+      font-size: 12px;
+      color: var(--brand);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .back:hover { text-decoration: underline; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      padding: 18px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+    .thumb { width: 100%; height: auto; display: block; background: #fff; border-radius: 12px; border: 1px solid rgba(0,0,0,0.06); }
+    .meta {
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .title { font-size: 14px; font-weight: 600; }
+    .links { display: flex; gap: 10px; font-size: 12px; }
+    .open { color: var(--brand); text-decoration: none; white-space: nowrap; }
+    .open:hover { text-decoration: underline; }
+    .tag { color: var(--muted); }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>对比图预览（旧 vs 新）</h1>
+    <p>左侧为快照基线（before），右侧为当前版本（after）。点击图片可打开大图。</p>
+  </div>
+  <a class="back" href="../index.html">返回原型预览</a>
+</header>
+
+<div class="grid">
+  <!-- 登录 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/login.png" target="_blank"><img class="thumb" src="before/login.png" alt="登录（旧）" loading="lazy" /></a>
+      <a href="../pages/login.png" target="_blank"><img class="thumb" src="../pages/login.png" alt="登录（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">登录</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/login.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/login.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 登录禁用态 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/login--disabled.png" target="_blank"><img class="thumb" src="before/login--disabled.png" alt="登录禁用态（旧）" loading="lazy" /></a>
+      <a href="../pages/login--disabled.png" target="_blank"><img class="thumb" src="../pages/login--disabled.png" alt="登录禁用态（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">登录（未勾选协议-禁用态）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/login--disabled.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/login--disabled.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 身份认证 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/verify.png" target="_blank"><img class="thumb" src="before/verify.png" alt="身份认证（旧）" loading="lazy" /></a>
+      <a href="../pages/verify.png" target="_blank"><img class="thumb" src="../pages/verify.png" alt="身份认证（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">身份认证</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/verify.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/verify.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 用户协议 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/agreement.png" target="_blank"><img class="thumb" src="before/agreement.png" alt="用户协议（旧）" loading="lazy" /></a>
+      <a href="../pages/agreement.png" target="_blank"><img class="thumb" src="../pages/agreement.png" alt="用户协议（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">用户协议</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/agreement.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/agreement.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 隐私政策 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/privacy.png" target="_blank"><img class="thumb" src="before/privacy.png" alt="隐私政策（旧）" loading="lazy" /></a>
+      <a href="../pages/privacy.png" target="_blank"><img class="thumb" src="../pages/privacy.png" alt="隐私政策（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">隐私政策</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/privacy.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/privacy.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 首页 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/home.png" target="_blank"><img class="thumb" src="before/home.png" alt="首页（旧）" loading="lazy" /></a>
+      <a href="../pages/home.png" target="_blank"><img class="thumb" src="../pages/home.png" alt="首页（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">首页</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/home.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/home.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 选择牧场 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/farm-select.png" target="_blank"><img class="thumb" src="before/farm-select.png" alt="选择牧场（旧）" loading="lazy" /></a>
+      <a href="../pages/farm-select.png" target="_blank"><img class="thumb" src="../pages/farm-select.png" alt="选择牧场（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">选择牧场</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/farm-select.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/farm-select.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 新增牧场 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/farm-create.png" target="_blank"><img class="thumb" src="before/farm-create.png" alt="新增牧场（旧）" loading="lazy" /></a>
+      <a href="../pages/farm-create.png" target="_blank"><img class="thumb" src="../pages/farm-create.png" alt="新增牧场（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">新增牧场</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/farm-create.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/farm-create.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 牛只信息 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/info.png" target="_blank"><img class="thumb" src="before/info.png" alt="牛只信息（旧）" loading="lazy" /></a>
+      <a href="../pages/info.png" target="_blank"><img class="thumb" src="../pages/info.png" alt="牛只信息（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">牛只信息</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/info.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/info.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 评分 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/unified.png" target="_blank"><img class="thumb" src="before/unified.png" alt="评分（旧）" loading="lazy" /></a>
+      <a href="../pages/unified.png" target="_blank"><img class="thumb" src="../pages/unified.png" alt="评分（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">评分</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/unified.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/unified.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 示意图弹窗 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/diagram-modal.png" target="_blank"><img class="thumb" src="before/diagram-modal.png" alt="示意图弹窗（旧）" loading="lazy" /></a>
+      <a href="../pages/diagram-modal.png" target="_blank"><img class="thumb" src="../pages/diagram-modal.png" alt="示意图弹窗（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">性状示意图弹窗</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/diagram-modal.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/diagram-modal.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 示意图弹窗（已加载态） -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/diagram-modal--loaded.png" target="_blank"><img class="thumb" src="before/diagram-modal--loaded.png" alt="示意图弹窗已加载（旧）" loading="lazy" /></a>
+      <a href="../pages/diagram-modal--loaded.png" target="_blank"><img class="thumb" src="../pages/diagram-modal--loaded.png" alt="示意图弹窗已加载（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">性状示意图弹窗（已加载态）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/diagram-modal--loaded.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/diagram-modal--loaded.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 拍照 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/photo.png" target="_blank"><img class="thumb" src="before/photo.png" alt="拍照（旧）" loading="lazy" /></a>
+      <a href="../pages/photo.png" target="_blank"><img class="thumb" src="../pages/photo.png" alt="拍照（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">拍照</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/photo.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/photo.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 拍照（已选照片态） -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/photo--with-images.png" target="_blank"><img class="thumb" src="before/photo--with-images.png" alt="拍照已选照片态（旧）" loading="lazy" /></a>
+      <a href="../pages/photo--with-images.png" target="_blank"><img class="thumb" src="../pages/photo--with-images.png" alt="拍照已选照片态（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">拍照（已选照片态）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/photo--with-images.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/photo--with-images.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 评分结果 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/result.png" target="_blank"><img class="thumb" src="before/result.png" alt="评分结果（旧）" loading="lazy" /></a>
+      <a href="../pages/result.png" target="_blank"><img class="thumb" src="../pages/result.png" alt="评分结果（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">评分结果</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/result.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/result.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 记录列表 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/records-list.png" target="_blank"><img class="thumb" src="before/records-list.png" alt="记录列表（旧）" loading="lazy" /></a>
+      <a href="../pages/records-list.png" target="_blank"><img class="thumb" src="../pages/records-list.png" alt="记录列表（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">记录列表</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/records-list.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/records-list.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 记录详情 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/records-detail.png" target="_blank"><img class="thumb" src="before/records-detail.png" alt="记录详情（旧）" loading="lazy" /></a>
+      <a href="../pages/records-detail.png" target="_blank"><img class="thumb" src="../pages/records-detail.png" alt="记录详情（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">记录详情</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/records-detail.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/records-detail.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 记录导出（版本选择） -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/records--export-sheet.png" target="_blank"><img class="thumb" src="before/records--export-sheet.png" alt="记录导出版本选择（旧）" loading="lazy" /></a>
+      <a href="../pages/records--export-sheet.png" target="_blank"><img class="thumb" src="../pages/records--export-sheet.png" alt="记录导出版本选择（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">记录导出（版本选择）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/records--export-sheet.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/records--export-sheet.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 记录导出（路径提示） -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/records--export-path.png" target="_blank"><img class="thumb" src="before/records--export-path.png" alt="记录导出路径提示（旧）" loading="lazy" /></a>
+      <a href="../pages/records--export-path.png" target="_blank"><img class="thumb" src="../pages/records--export-path.png" alt="记录导出路径提示（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">记录导出（路径提示）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/records--export-path.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/records--export-path.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 设置 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/settings.png" target="_blank"><img class="thumb" src="before/settings.png" alt="设置（旧）" loading="lazy" /></a>
+      <a href="../pages/settings.png" target="_blank"><img class="thumb" src="../pages/settings.png" alt="设置（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">设置</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/settings.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/settings.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 设置：性状默认分 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/settings--trait-defaults-1.png" target="_blank"><img class="thumb" src="before/settings--trait-defaults-1.png" alt="设置性状默认分1（旧）" loading="lazy" /></a>
+      <a href="../pages/settings--trait-defaults-1.png" target="_blank"><img class="thumb" src="../pages/settings--trait-defaults-1.png" alt="设置性状默认分1（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">设置（性状默认分-1）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/settings--trait-defaults-1.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/settings--trait-defaults-1.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pair">
+      <a href="before/settings--trait-defaults-2.png" target="_blank"><img class="thumb" src="before/settings--trait-defaults-2.png" alt="设置性状默认分2（旧）" loading="lazy" /></a>
+      <a href="../pages/settings--trait-defaults-2.png" target="_blank"><img class="thumb" src="../pages/settings--trait-defaults-2.png" alt="设置性状默认分2（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">设置（性状默认分-2）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/settings--trait-defaults-2.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/settings--trait-defaults-2.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 设置：阈值 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/settings--threshold.png" target="_blank"><img class="thumb" src="before/settings--threshold.png" alt="设置分数阈值（旧）" loading="lazy" /></a>
+      <a href="../pages/settings--threshold.png" target="_blank"><img class="thumb" src="../pages/settings--threshold.png" alt="设置分数阈值（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">设置（分数阈值-展开态）</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/settings--threshold.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/settings--threshold.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 团队信息 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/team-info.png" target="_blank"><img class="thumb" src="before/team-info.png" alt="团队信息（旧）" loading="lazy" /></a>
+      <a href="../pages/team-info.png" target="_blank"><img class="thumb" src="../pages/team-info.png" alt="团队信息（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">团队信息</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/team-info.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/team-info.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 管理后台 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/admin-panel.png" target="_blank"><img class="thumb" src="before/admin-panel.png" alt="管理后台（旧）" loading="lazy" /></a>
+      <a href="../pages/admin-panel.png" target="_blank"><img class="thumb" src="../pages/admin-panel.png" alt="管理后台（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">管理后台</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/admin-panel.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/admin-panel.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+
+  <!-- 测试示意图 -->
+  <div class="card">
+    <div class="pair">
+      <a href="before/test-diagram.png" target="_blank"><img class="thumb" src="before/test-diagram.png" alt="测试示意图（旧）" loading="lazy" /></a>
+      <a href="../pages/test-diagram.png" target="_blank"><img class="thumb" src="../pages/test-diagram.png" alt="测试示意图（新）" loading="lazy" /></a>
+    </div>
+    <div class="meta">
+      <div class="title">测试示意图</div>
+      <div class="links"><span class="tag">旧</span><a class="open" href="before/test-diagram.png" target="_blank">大图</a><span class="tag">新</span><a class="open" href="../pages/test-diagram.png" target="_blank">大图</a></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+

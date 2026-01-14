@@ -1,0 +1,21 @@
+<nav-header title="测试示意图" />
+<view class="container">
+  <view class="header">
+    <text class="title">点击下方性状名称测试示意图</text>
+  </view>
+
+  <view class="trait-list">
+    <view class="trait-item" wx:for="{{traits}}" wx:key="key">
+      <text class="trait-name" bindtap="onShowDiagram" data-trait-key="{{item.key}}">
+        {{item.name}}
+      </text>
+    </view>
+  </view>
+
+  <!-- 性状示意图弹窗 -->
+  <trait-diagram
+    visible="{{showDiagram}}"
+    trait-key="{{currentTraitKey}}"
+    bind:close="onCloseDiagram"
+  />
+</view>

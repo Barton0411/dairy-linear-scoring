@@ -1,0 +1,193 @@
+/* app.wxss - 全局样式 */
+
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+  color: #1c1c1e;
+  background-color: #f2f8fb; /* 伊利官网常用浅蓝背景 */
+}
+
+/* 通用容器 */
+.container {
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 卡片样式 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  border: 2rpx solid #e0edf6;
+  box-shadow: none;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: #0087cd;
+  color: #fff;
+  border: none;
+  border-radius: 16rpx;
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: #1c1c1e;
+  border: 1rpx solid #d8d8d8;
+  border-radius: 16rpx;
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #d8d8d8;
+  border-radius: 14rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.form-input:focus {
+  border-color: #0087cd;
+}
+
+/* 评分滑块 */
+.score-slider {
+  padding: 20rpx 0;
+}
+
+.score-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.score-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.score-value {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #0087cd;
+}
+
+/* 列表样式 */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 50rpx;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50rpx;
+}
+
+/* 安全区域 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Flex布局工具类 */
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 间距工具类 */
+.mt-20 { margin-top: 20rpx; }
+.mt-40 { margin-top: 40rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-40 { margin-bottom: 40rpx; }
+.p-20 { padding: 20rpx; }
+.p-30 { padding: 30rpx; }
+
+/* 文字工具类 */
+.text-center { text-align: center; }
+.text-gray { color: #999; }
+.text-brand { color: #0087cd; }
+.text-success { color: #278546; }
+.text-sm { font-size: 24rpx; }
+.text-lg { font-size: 36rpx; }
+.font-bold { font-weight: 600; }

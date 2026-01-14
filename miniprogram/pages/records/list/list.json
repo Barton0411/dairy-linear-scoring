@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "评分记录",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

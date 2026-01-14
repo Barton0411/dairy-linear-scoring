@@ -1,0 +1,30 @@
+<nav-header title="隐私政策" />
+<view class="container">
+  <scroll-view class="scroll" scroll-y>
+    <view class="card">
+      <text class="title">隐私政策</text>
+      <text class="meta">更新日期：2025-12-31</text>
+      <text class="p">我们非常重视你的个人信息保护。本政策说明我们如何收集、使用与保护相关信息。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">1. 收集的信息</text>
+      <text class="p">为完成登录与业务使用，可能收集：微信头像/昵称（如用户授权）、工号与姓名、评分数据、照片、离线缓存与设备基础信息（用于排障）。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">2. 使用目的</text>
+      <text class="p">用于身份验证、评分记录保存、离线同步、导出与审计管理等业务目的。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">3. 存储与保护</text>
+      <text class="p">离线数据将存储在本地缓存；联网后可同步到服务器。我们将采取合理措施保护数据安全，避免泄露、篡改与丢失。</text>
+    </view>
+
+    <view class="card">
+      <text class="h">4. 你的权利</text>
+      <text class="p">你可在应用内退出登录并清除本地缓存。若需更正或删除业务数据，请联系管理员处理。</text>
+    </view>
+  </scroll-view>
+</view>

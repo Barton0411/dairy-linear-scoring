@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "记录详情",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

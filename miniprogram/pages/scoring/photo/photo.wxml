@@ -1,0 +1,48 @@
+<!--pages/scoring/photo/photo.wxml-->
+<nav-header title="拍照记录" />
+<view class="container">
+  <view class="header">
+    <text class="title">拍照记录</text>
+    <text class="subtitle">可拍摄{{maxPhotos}}张照片记录牛只体型</text>
+  </view>
+
+  <!-- 照片列表 -->
+  <view class="photo-grid">
+    <view class="grid-item" wx:for="{{gridItems}}" wx:key="id">
+      <image
+        wx:if="{{item.type === 'photo'}}"
+        class="photo-img"
+        src="{{item.path}}"
+        mode="aspectFill"
+        data-index="{{item.photoIndex}}"
+        bindtap="onPreviewPhoto"
+      />
+      <view
+        wx:if="{{item.type === 'photo'}}"
+        class="photo-delete"
+        data-index="{{item.photoIndex}}"
+        catchtap="onDeletePhoto"
+      >
+        <text>×</text>
+      </view>
+
+      <view wx:elif="{{item.type === 'add'}}" class="add-cell" bindtap="onAddPhoto">
+        <text class="add-plus">＋</text>
+        <text class="add-hint">拍照/相册</text>
+      </view>
+
+      <view wx:else class="empty-cell" />
+    </view>
+  </view>
+
+  <!-- 照片计数 -->
+  <view class="photo-count">
+    <text>已拍 {{photoCount}}/{{maxPhotos}} 张</text>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer safe-bottom">
+    <button class="btn-secondary" bindtap="onSkip">跳过</button>
+    <button class="btn-primary" bindtap="onComplete">完成</button>
+  </view>
+</view>

@@ -1,0 +1,57 @@
+<!--pages/scoring/info/info.wxml-->
+<nav-header title="牛只信息" />
+<view class="container">
+  <view class="card">
+    <view class="card-title">牛只信息</view>
+
+    <view class="form-group">
+      <text class="form-label">当前牧场</text>
+      <view class="farm-info">
+        <text class="farm-name">{{currentFarm.farmName}}</text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">提示</text>
+      <view class="hint-info">
+        <text class="hint-text">未修改的性状将使用默认分，可在设置中调整。</text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">牛号（耳号）</text>
+      <input
+        class="form-input"
+        type="digit"
+        placeholder="请输入牛号"
+        value="{{earTag}}"
+        bindinput="onEarTagInput"
+        confirm-type="next"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">胎次</text>
+      <input
+        class="form-input"
+        type="number"
+        placeholder="请输入胎次"
+        value="{{parity}}"
+        bindinput="onParityInput"
+        confirm-type="done"
+      />
+      <text class="form-hint">* 第几胎产犊，如第1胎、第2胎等</text>
+    </view>
+  </view>
+
+  <view class="action-area safe-bottom">
+    <button
+      class="btn-primary btn-block"
+      bindtap="onStartScoring"
+      loading="{{loading}}"
+      disabled="{{loading || !earTag || !parity}}"
+    >
+      开始评分
+    </button>
+  </view>
+</view>

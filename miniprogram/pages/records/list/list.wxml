@@ -1,0 +1,152 @@
+<!--pages/records/list/list.wxml-->
+<nav-header title="评分记录" />
+<view class="container">
+  <!-- 统计 -->
+  <view class="stats-card card">
+    <view class="stats-header">
+      <text class="stats-title">统计</text>
+      <text class="stats-action" bindtap="onToggleTools">{{showTools ? '收起' : '筛选/操作'}}</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{stats.total}}</text>
+        <text class="stat-label">总记录</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.mine}}</text>
+        <text class="stat-label">我的</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{stats.offline}}</text>
+        <text class="stat-label">待同步</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选与操作 -->
+  <view class="tools-card card" wx:if="{{showTools}}">
+    <view class="tool-row">
+      <text class="tool-label">视图</text>
+      <view class="segmented">
+        <view class="seg-item {{viewMode === 'allFarms' ? 'active' : ''}}" bindtap="onSetViewMode" data-mode="allFarms">
+          全部牧场
+        </view>
+        <view class="seg-item {{viewMode === 'singleFarm' ? 'active' : ''}}" bindtap="onSetViewMode" data-mode="singleFarm">
+          当前牧场
+        </view>
+      </view>
+    </view>
+
+    <view class="tool-row">
+      <text class="tool-label">筛选</text>
+      <view class="segmented">
+        <view class="seg-item {{filterType === 'all' ? 'active' : ''}}" bindtap="onFilterChange" data-type="all">
+          全部
+        </view>
+        <view class="seg-item {{filterType === 'mine' ? 'active' : ''}}" bindtap="onFilterChange" data-type="mine">
+          我的
+        </view>
+      </view>
+    </view>
+
+    <view class="tool-row" wx:if="{{viewMode === 'singleFarm'}}">
+      <text class="tool-label">当前牧场</text>
+      <view class="tool-value" bindtap="onSelectFarm">
+        <text>{{currentFarm.farmName ? currentFarm.farmName : '请选择'}}</text>
+        <text class="tool-arrow">›</text>
+      </view>
+    </view>
+
+    <view class="tool-row" wx:if="{{viewMode === 'singleFarm'}}">
+      <text class="tool-label">开始日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onStartDateChange">
+        <view class="picker-display">
+          <text>{{startDate || '请选择'}}</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="tool-row" wx:if="{{viewMode === 'singleFarm'}}">
+      <text class="tool-label">结束日期</text>
+      <picker mode="date" value="{{endDate}}" bindchange="onEndDateChange">
+        <view class="picker-display">
+          <text>{{endDate || '请选择'}}</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="tool-row" wx:if="{{(startDate || endDate) && viewMode === 'singleFarm'}}">
+      <text class="tool-label">日期筛选</text>
+      <text class="tool-link" bindtap="onClearDateFilter">清除筛选</text>
+    </view>
+
+    <view class="tool-actions">
+      <button class="tool-btn" bindtap="onBatchExport" disabled="{{viewMode === 'allFarms' || displayRecords.length === 0}}">
+        批量导出
+      </button>
+      <button class="tool-btn primary" bindtap="onSyncOffline" disabled="{{stats.offline === 0}}">
+        同步离线 ({{stats.offline}})
+      </button>
+      <button class="tool-btn danger" bindtap="onClearLocalData">
+        清理本地
+      </button>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <scroll-view class="records-list" scroll-y refresher-enabled bindrefresherrefresh="onRefresh" refresher-triggered="{{refreshing}}">
+    <!-- 所有牧场模式：显示牧场分组列表 -->
+    <block wx:if="{{viewMode === 'allFarms'}}">
+      <view class="farm-card card" wx:for="{{groupedRecords}}" wx:key="farmCode" bindtap="onSelectFarmDetail" data-farm="{{item}}">
+        <view class="farm-info">
+          <text class="farm-name">{{item.farmName}}</text>
+          <text class="farm-code">{{item.farmCode}}</text>
+        </view>
+        <view class="farm-count">
+          <text class="count-value">{{item.count}}</text>
+          <text class="count-label">条</text>
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{groupedRecords.length === 0 && !loading}}">
+        <text class="empty-text" wx:if="{{userInfo && userInfo.employeeId}}">暂无评分记录</text>
+        <text class="empty-text" wx:else>请先登录</text>
+        <text class="empty-hint" wx:if="{{userInfo && userInfo.employeeId}}">开始评分后记录将显示在这里</text>
+        <text class="empty-hint login-hint" wx:else bindtap="onGotoLogin">点击此处登录</text>
+      </view>
+    </block>
+
+    <!-- 单牧场模式：显示记录详情列表 -->
+    <block wx:else>
+      <view class="record-card card" wx:for="{{displayRecords}}" wx:key="localId" bindtap="onViewDetail" bindlongpress="onRecordLongPress" data-record="{{item}}">
+        <view class="record-main">
+          <view class="record-left">
+            <text class="ear-tag">耳号 {{item.earTag}}</text>
+            <text class="record-meta">{{item.createdAtFormatted}} · {{item.appraiserName}}</text>
+          </view>
+          <view class="record-right">
+            <text class="score-value">{{item.totalScore}}</text>
+            <text class="grade-text" style="color: {{item.gradeColor}}">{{item.grade}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{displayRecords.length === 0 && !loading}}">
+        <text class="empty-text" wx:if="{{userInfo && userInfo.employeeId}}">暂无评分记录</text>
+        <text class="empty-text" wx:else>请先登录</text>
+        <text class="empty-hint" wx:if="{{userInfo && userInfo.employeeId}}">该牧场暂无记录</text>
+        <text class="empty-hint login-hint" wx:else bindtap="onGotoLogin">点击此处登录</text>
+      </view>
+    </block>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore && !loading}}">
+      <text bindtap="onLoadMore">加载更多</text>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+  </scroll-view>
+</view>

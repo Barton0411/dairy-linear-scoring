@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "新建牧场",
+  "disableScroll": false
+,
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

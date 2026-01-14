@@ -1,0 +1,35 @@
+<!-- pages/records/detail/detail.wxml -->
+<nav-header title="记录详情" />
+<view class="container">
+  <view wx:if="{{record}}">
+    <view class="card info-card">
+      <view class="info-header">
+        <view class="info-left">
+          <text class="ear-tag">耳号 {{record.earTag}}</text>
+          <text class="info-meta">牧场：{{record.farmName}} ({{record.farmCode}})</text>
+          <text class="info-meta">时间：{{record.createdAtFormatted}}</text>
+        </view>
+        <view class="info-right">
+          <text class="score-value">{{record.totalScore}}</text>
+          <text class="grade-text" style="color: {{record.gradeColor}}">{{record.grade}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card trait-card">
+      <view class="card-title">性状分</view>
+      <view class="trait-row" wx:for="{{traitScores}}" wx:key="key">
+        <text class="trait-name">{{item.name}}</text>
+        <text class="trait-score">{{item.score}}</text>
+      </view>
+    </view>
+
+    <view class="action-area safe-bottom">
+      <button class="btn-primary btn-block" bindtap="onBackToList">返回记录列表</button>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-text">暂无记录详情</text>
+  </view>
+</view>

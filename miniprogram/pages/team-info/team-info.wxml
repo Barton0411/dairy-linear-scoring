@@ -1,0 +1,17 @@
+<!-- pages/team-info/team-info.wxml -->
+<nav-header title="团队信息" />
+<view class="container">
+  <view class="team-list" wx:if="{{appraisers.length > 0}}">
+    <view class="team-card card" wx:for="{{appraisers}}" wx:key="employeeId">
+      <view class="team-header">
+        <text class="team-name">{{item.appraiserName}}</text>
+        <text class="team-role {{item.role}}">{{item.roleLabel}}</text>
+      </view>
+      <text class="team-farms">可访问牧场：{{item.farmsText}}</text>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-text">暂无鉴定员数据</text>
+  </view>
+</view>

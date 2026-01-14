@@ -1,0 +1,60 @@
+/* pages/team-info/team-info.wxss */
+
+.container {
+  min-height: 100vh;
+  background: transparent;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.team-card {
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.team-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.team-role {
+  font-size: 22rpx;
+  color: #5f6464;
+  background: #f1f2f3;
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+}
+
+.team-role.super_admin {
+  color: #0087cd;
+  background: #e0edf6;
+  font-weight: 600;
+}
+
+.team-role.admin {
+  color: #0087cd;
+  background: #e0edf6;
+}
+
+.team-farms {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 30rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #5f6464;
+}

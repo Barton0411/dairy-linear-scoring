@@ -1,0 +1,104 @@
+<!--pages/scoring/unified/unified.wxml-->
+<nav-header title="评分" />
+<view class="container">
+  <!-- 顶部信息 -->
+  <view class="header card">
+    <view class="cattle-info">
+      <text class="ear-tag">牛号 {{currentScoring.earTag}}</text>
+      <text class="parity" wx:if="{{currentScoring.parity}}">胎次 {{currentScoring.parity}}</text>
+    </view>
+    <view class="score-preview">
+      <text class="score-value">{{totalScore.score}}</text>
+      <text class="score-grade" style="color: {{gradeColor}}">{{totalScore.grade}}</text>
+    </view>
+  </view>
+
+  <!-- 附加评分 -->
+  <view class="extra-section card">
+    <view class="extra-row">
+      <text class="extra-label">印象分</text>
+      <input
+        class="value-pill"
+        type="number"
+        value="{{currentScoring.impressionScore}}"
+        placeholder="{{settings.defaultImpressionScore}}"
+        bindinput="onImpressionInput"
+        bindblur="onImpressionBlur"
+      />
+    </view>
+    <view class="extra-row">
+      <text class="extra-label">乳房空满</text>
+      <view class="value-pill selectable" bindtap="onSelectUdderFullness">
+        <text>{{currentScoring.udderFullness ? currentScoring.udderFullness : (settings.defaultUdderFullness ? settings.defaultUdderFullness : '空/满')}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 性状列表 -->
+  <view class="category-list">
+    <view class="category-section card" wx:for="{{categories}}" wx:key="key" wx:for-item="category">
+      <view class="category-header">
+        <view class="category-title">
+          <text class="category-name">{{category.name}}</text>
+          <text class="category-weight">({{category.weightPercent}}%)</text>
+        </view>
+        <text class="modified-count" wx:if="{{modifiedCounts[category.key] > 0}}">
+          已修改 {{modifiedCounts[category.key]}} 项
+        </text>
+      </view>
+
+      <view class="traits-container">
+        <view class="trait-item" wx:for="{{category.traits}}" wx:key="key" wx:for-item="trait">
+          <view class="trait-row">
+            <text class="trait-name {{modifiedMap[trait.key] ? 'modified' : ''}}" catchtap="onShowDiagram" data-trait-key="{{trait.key}}">
+              {{trait.name}}
+            </text>
+            <text class="trait-score {{modifiedMap[trait.key] ? 'modified' : ''}}">
+              {{scores[trait.key]}}
+            </text>
+          </view>
+
+          <!-- 分数描述行 -->
+          <view class="score-descriptions">
+            <text class="score-desc score-desc-low">{{trait.low}}</text>
+            <text class="score-desc score-desc-high">{{trait.high}}</text>
+          </view>
+
+          <view class="score-buttons">
+            <view
+              class="score-btn {{scores[trait.key] === item ? 'active' : ''}} {{settings.defaultScores[trait.key] === item ? 'is-default' : ''}} {{modifiedMap[trait.key] && scores[trait.key] === item ? 'modified' : ''}} {{optimalScores[trait.key] === item ? 'is-optimal' : ''}}"
+              wx:for="{{[1,2,3,4,5,6,7,8,9]}}"
+              wx:key="*this"
+              wx:for-item="item"
+              data-key="{{trait.key}}"
+              data-value="{{item}}"
+              catchtap="onScoreButtonTap"
+            >
+              <text class="score-number">{{item}}</text>
+              <text class="optimal-mark" wx:if="{{optimalScores[trait.key] === item}}">⭐</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="footer safe-bottom">
+    <view class="action-buttons">
+      <button class="action-btn secondary" bindtap="onResetAll">
+        全部恢复默认分
+      </button>
+      <button class="action-btn primary" bindtap="onNextStep">
+        下一步
+      </button>
+    </view>
+  </view>
+
+  <!-- 性状示意图弹窗 -->
+  <trait-diagram
+    visible="{{showDiagram}}"
+    trait-key="{{currentTraitKey}}"
+    bind:close="onCloseDiagram"
+  />
+</view>

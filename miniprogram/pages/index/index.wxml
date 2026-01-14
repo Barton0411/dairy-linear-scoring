@@ -1,0 +1,131 @@
+<!--pages/index/index.wxml-->
+<nav-header title="伊利奶牛体型外貌鉴定系统" />
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-card card">
+    <view class="user-info" bindtap="onUserInfoTap">
+      <view class="avatar">
+        <image
+          wx:if="{{userInfo && userInfo.avatarUrl}}"
+          class="avatar-img"
+          src="{{userInfo.avatarUrl}}"
+          mode="aspectFill"
+        />
+        <text wx:else class="avatar-text">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName.charAt(0) : '游'}}</text>
+      </view>
+      <view class="user-detail">
+        <text class="nickname">{{userInfo && userInfo.appraiserName ? userInfo.appraiserName : '未登录'}}</text>
+        <text class="role" wx:if="{{isLoggedIn}}">
+          {{(userInfo && userInfo.role === 'super_admin') ? '超级管理员' : ((userInfo && userInfo.role === 'admin') ? '管理员' : '鉴定员')}} · {{userInfo && userInfo.isCertified ? '奶协认证鉴定员' : '未认证鉴定员'}}
+        </text>
+        <text class="role guest-hint" wx:else>
+          点击登录以使用完整功能
+        </text>
+      </view>
+    </view>
+    <view class="settings-btn" bindtap="onSettings">
+      <text class="settings-icon">⚙</text>
+    </view>
+  </view>
+
+  <!-- 待审批证书通知（仅超级管理员可见） -->
+  <view class="cert-notification" wx:if="{{isSuperAdmin && pendingCertCount > 0}}" bindtap="onGoToCertReview">
+    <view class="notification-icon">🔔</view>
+    <view class="notification-content">
+      <text class="notification-title">有 {{pendingCertCount}} 个证书待审批</text>
+      <text class="notification-subtitle">点击前往审批</text>
+    </view>
+    <view class="notification-arrow">›</view>
+  </view>
+
+  <!-- 当前牧场 -->
+  <view class="farm-card card" bindtap="onSelectFarm">
+    <view class="farm-header">
+      <text class="farm-label">当前牧场</text>
+      <text class="farm-action">{{isLoggedIn ? '切换 ›' : '需要登录'}}</text>
+    </view>
+    <view class="farm-name" wx:if="{{currentFarm}}">
+      <text class="name">{{currentFarm.farmName}}</text>
+      <text class="code">编号: {{currentFarm.farmCode}}</text>
+    </view>
+    <view class="farm-empty" wx:else>
+      <text>{{isLoggedIn ? '点击选择牧场' : '请先登录'}}</text>
+    </view>
+  </view>
+
+  <!-- 同步状态 -->
+  <view class="sync-card card" wx:if="{{pendingSyncCount > 0}}">
+    <view class="sync-header" bindtap="toggleOfflineList">
+      <view class="sync-info">
+        <text class="sync-icon">⚠️</text>
+        <text class="sync-text">待上传: {{pendingSyncCount}} 条评分</text>
+      </view>
+      <text class="sync-toggle">{{showOfflineList ? '收起 ▲' : '展开 ▼'}}</text>
+    </view>
+
+    <!-- 离线评分列表 -->
+    <view class="offline-list" wx:if="{{showOfflineList && offlineScores.length > 0}}">
+      <view class="offline-item" wx:for="{{offlineScores}}" wx:key="localId">
+        <view class="offline-item-header">
+          <text class="offline-ear-tag">🐄 {{item.earTag}}</text>
+          <view class="offline-score-badge">
+            <text class="score-number" style="color: {{item.gradeColor}}">{{item.totalScore}}</text>
+            <text class="score-grade" style="color: {{item.gradeColor}}">{{item.grade}}</text>
+          </view>
+        </view>
+        <view class="offline-item-info">
+          <text class="offline-farm">📍 {{item.farmName}}</text>
+          <text class="offline-time">🕐 {{item.timeStr}}</text>
+        </view>
+        <view class="offline-item-meta">
+          <text class="offline-parity" wx:if="{{item.parity}}">胎次{{item.parity}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 同步按钮 -->
+    <view class="sync-action-btn" bindtap="onManualSync">
+      <text>{{loading ? '同步中...' : '立即同步'}}</text>
+    </view>
+  </view>
+
+  <!-- 快速开始 -->
+  <view class="action-section">
+    <view class="section-title">开始评分</view>
+
+    <view class="action-card card" bindtap="onStartScoring">
+      <view class="action-icon normal-icon">▶</view>
+      <view class="action-content">
+        <text class="action-title">开始评分</text>
+        <text class="action-desc">默认分已预填，修改异常性状即可</text>
+      </view>
+      <text class="action-arrow">›</text>
+    </view>
+
+    <view class="action-card card" bindtap="onViewRecords">
+      <view class="action-icon records-icon">📋</view>
+      <view class="action-content">
+        <text class="action-title">查看记录</text>
+        <text class="action-desc">查看历史评分、导出数据</text>
+      </view>
+      <text class="action-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 开发信息 -->
+  <view class="brand-section">
+    <view class="section-title">开发信息</view>
+    <view class="brand-card card">
+      <view class="brand-header">
+        <image class="brand-logo" src="/img/yili-logo.png" mode="aspectFit" />
+        <view class="brand-meta">
+          <text class="brand-app">应用名称：伊利奶牛体型外貌鉴定系统</text>
+          <text class="brand-dev">开发团队：伊利奶科院育种中心</text>
+        </view>
+      </view>
+      <view class="brand-contact" bindtap="onShowContact">
+        <text class="contact-btn">📞 反馈联系方式 ›</text>
+      </view>
+    </view>
+  </view>
+</view>

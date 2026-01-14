@@ -1,0 +1,29 @@
+/* 全局导航栏样式 */
+.nav-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.home-logo {
+  width: 80rpx;
+  height: 60rpx;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.home-logo:active {
+  opacity: 0.7;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-right: 80rpx; /* 平衡logo宽度，使标题居中 */
+}

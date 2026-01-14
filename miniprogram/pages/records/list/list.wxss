@@ -1,0 +1,298 @@
+/* pages/records/list/list.wxss */
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 统计卡片 */
+.stats-card {
+  margin-bottom: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.stats-title {
+  font-size: 26rpx;
+  color: #5f6464;
+  font-weight: 500;
+}
+
+.stats-action {
+  font-size: 24rpx;
+  color: #0087cd;
+}
+
+.stats-grid {
+  display: flex;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #0087cd;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+/* 筛选与操作 */
+.tools-card {
+  margin-bottom: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.tool-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #e0edf6;
+}
+
+.tool-row:last-child {
+  border-bottom: none;
+}
+
+.tool-label {
+  font-size: 26rpx;
+  color: #1c1c1e;
+  font-weight: 500;
+}
+
+.tool-link {
+  font-size: 24rpx;
+  color: #0087cd;
+}
+
+.tool-value {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  background: #f1f2f3;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  color: #1c1c1e;
+}
+
+.tool-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.segmented {
+  display: flex;
+  align-items: center;
+  background: #f1f2f3;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.seg-item {
+  padding: 6rpx 16rpx;
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.seg-item.active {
+  background: #fff;
+  color: #0087cd;
+  font-weight: 600;
+}
+
+.picker-display {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  background: #f1f2f3;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  color: #1c1c1e;
+}
+
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.tool-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  background: #f1f2f3;
+  color: #5f6464;
+  font-size: 26rpx;
+  border-radius: 16rpx;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tool-btn::after {
+  border: none;
+}
+
+.tool-btn.primary {
+  background: #0087cd;
+  color: #fff;
+}
+
+.tool-btn.danger {
+  background: #fff5f5;
+  color: #ff6b6b;
+}
+
+.tool-btn[disabled] {
+  opacity: 0.4;
+}
+
+/* 列表 */
+.records-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.record-card {
+  margin-bottom: 16rpx;
+  padding: 24rpx;
+}
+
+.record-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.ear-tag {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.record-meta {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.record-right {
+  text-align: right;
+}
+
+.score-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #0087cd;
+  line-height: 1;
+}
+
+.grade-text {
+  font-size: 24rpx;
+  color: #0087cd;
+  margin-top: 6rpx;
+  display: block;
+}
+
+/* 牧场分组卡片 */
+.farm-card {
+  margin-bottom: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.farm-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.farm-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.farm-code {
+  font-size: 24rpx;
+  color: #5f6464;
+}
+
+.farm-count {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+  color: #0087cd;
+}
+
+.count-value {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.count-label {
+  font-size: 22rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 30rpx;
+}
+
+.empty-text {
+  display: block;
+  font-size: 30rpx;
+  color: #5f6464;
+  margin-bottom: 8rpx;
+}
+
+.empty-hint {
+  display: block;
+  font-size: 24rpx;
+  color: #979797;
+}
+
+.login-hint {
+  color: #0087cd;
+  text-decoration: underline;
+  margin-top: 20rpx;
+}
+
+/* 加载更多/加载中 */
+.load-more,
+.loading {
+  text-align: center;
+  padding: 30rpx;
+  font-size: 26rpx;
+  color: #5f6464;
+}

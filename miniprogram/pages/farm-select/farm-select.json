@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "选择牧场",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

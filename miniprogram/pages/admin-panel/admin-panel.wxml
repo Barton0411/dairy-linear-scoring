@@ -1,0 +1,400 @@
+<!-- pages/admin-panel/admin-panel.wxml -->
+<nav-header title="管理后台" />
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">管理后台</text>
+    <text class="subtitle" wx:if="{{isSuperAdmin}}">超级管理员</text>
+    <text class="subtitle" wx:else>管理员</text>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view
+      class="tab-item {{activeTab === 'appraiser' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="appraiser"
+    >
+      <text>鉴定员管理</text>
+    </view>
+    <view
+      class="tab-item {{activeTab === 'farm' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="farm"
+    >
+      <text>牧场匹配</text>
+    </view>
+    <view
+      class="tab-item {{activeTab === 'farmManage' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="farmManage"
+    >
+      <text>牧场管理</text>
+    </view>
+
+    <!-- 证书审批Tab -->
+    <view
+      class="tab-item {{activeTab === 'certReview' ? 'active' : ''}}"
+      bindtap="onSwitchTab"
+      data-tab="certReview"
+    >
+      <text>证书审批</text>
+      <view class="tab-badge" wx:if="{{pendingCertCount > 0}}">{{pendingCertCount}}</view>
+    </view>
+  </view>
+
+  <!-- 鉴定员管理 Tab -->
+  <view class="tab-content" wx:if="{{activeTab === 'appraiser'}}">
+    <!-- 添加鉴定员按钮 -->
+    <view class="farm-manage-toolbar" wx:if="{{isSuperAdmin}}">
+      <button class="create-farm-btn" bindtap="onAddAppraiser">
+        + 添加鉴定员
+      </button>
+    </view>
+
+    <view class="farm-manage-list">
+      <view class="farm-card card" wx:for="{{appraisers}}" wx:key="employeeId">
+        <view class="farm-manage-info">
+          <view class="farm-manage-name">{{item.appraiserName}}</view>
+          <view class="farm-manage-details">
+            <text class="farm-manage-code">工号: {{item.employeeId}}</text>
+          </view>
+          <view class="badges-row">
+            <text
+              class="cert-badge {{item.isCertified ? 'certified' : 'not-certified'}}"
+              bindtap="onViewAppraiserCert"
+              data-employee-id="{{item.employeeId}}"
+              data-is-certified="{{item.isCertified}}"
+            >
+              {{item.isCertified ? '奶协认证' : '未认证'}}
+            </text>
+            <text
+              class="role-badge {{item.role === 'super_admin' ? 'super-admin' : item.role === 'admin' ? 'admin' : 'appraiser'}}"
+            >
+              {{item.role === 'super_admin' ? '超级管理员' : item.role === 'admin' ? '管理员' : '鉴定员'}}
+            </text>
+          </view>
+          <view class="appraiser-farms-row">
+            <text class="farms-label">可访问牧场: </text>
+            <text class="farms-text">{{item.farmsText}}</text>
+          </view>
+        </view>
+        <view class="farm-manage-actions">
+          <button
+            wx:if="{{isSuperAdmin}}"
+            class="btn-more"
+            data-employee-id="{{item.employeeId}}"
+            bindtap="onOpenAppraiserActions"
+          >
+            管理
+          </button>
+          <text wx:else class="no-permission">仅超级管理员可编辑和删除</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{appraisers.length === 0}}">
+      <text class="empty-icon">👤</text>
+      <text class="empty-text">暂无鉴定员</text>
+    </view>
+  </view>
+
+  <!-- 牧场匹配 Tab -->
+  <view class="tab-content" wx:if="{{activeTab === 'farm'}}">
+    <!-- 选择鉴定员 -->
+    <view class="section">
+      <view class="section-title">选择鉴定员</view>
+      <picker
+        mode="selector"
+        range="{{appraisers}}"
+        range-key="appraiserName"
+        value="{{selectedAppraiserIndex}}"
+        bindchange="onAppraiserSelect"
+      >
+        <view class="picker-wrapper">
+          <text class="picker-label">
+            {{selectedAppraiser ? selectedAppraiser.appraiserName + ' (' + selectedAppraiser.employeeId + ')' : '请选择鉴定员'}}
+          </text>
+          <text class="arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 牧场列表 -->
+    <view class="section" wx:if="{{selectedAppraiser}}">
+      <view class="section-title">牧场列表</view>
+      <view class="farm-list">
+        <view class="farm-item" wx:for="{{farms}}" wx:key="farmCode">
+          <view class="farm-info">
+            <view class="farm-name">{{item.farmName}}</view>
+            <view class="farm-code">站号: {{item.farmCode}}</view>
+            <view class="farm-dhi" wx:if="{{item.dhiCode}}">DHI: {{item.dhiCode}}</view>
+          </view>
+          <view class="farm-action">
+            <switch
+              checked="{{item.isLinked}}"
+              data-farm-code="{{item.farmCode}}"
+              bindchange="onToggleFarmLink"
+              color="#0087CD"
+            />
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-state" wx:if="{{farms.length === 0}}">
+        <text class="empty-icon">🏠</text>
+        <text class="empty-text">暂无牧场</text>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">👆</text>
+      <text class="empty-text">请先选择鉴定员</text>
+    </view>
+  </view>
+
+  <!-- 牧场管理 Tab -->
+  <view class="tab-content" wx:if="{{activeTab === 'farmManage'}}">
+    <view class="farm-manage-toolbar">
+      <button class="create-farm-btn" bindtap="onCreateFarm">
+        + 新建牧场
+      </button>
+    </view>
+
+    <view class="farm-manage-list">
+      <view class="farm-card card" wx:for="{{allFarms}}" wx:key="farmCode">
+        <view class="farm-manage-info">
+          <view class="farm-manage-name">{{item.farmName}}</view>
+          <view class="farm-manage-details">
+            <text class="farm-manage-code">站号: {{item.farmCode}}</text>
+            <text class="farm-manage-dhi" wx:if="{{item.dhiCode}}">DHI: {{item.dhiCode}}</text>
+            <text class="farm-manage-dhi no-dhi" wx:else>未设置DHI</text>
+          </view>
+        </view>
+        <view class="farm-manage-actions">
+          <button
+            wx:if="{{isSuperAdmin}}"
+            class="btn-more"
+            data-farm-code="{{item.farmCode}}"
+            data-farm-name="{{item.farmName}}"
+            data-dhi-code="{{item.dhiCode}}"
+            bindtap="onOpenFarmActions"
+          >
+            管理
+          </button>
+          <text wx:else class="no-permission">仅超级管理员可编辑和删除</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{allFarms.length === 0}}">
+      <text class="empty-icon">🏠</text>
+      <text class="empty-text">暂无牧场</text>
+    </view>
+  </view>
+
+  <!-- 编辑牧场弹窗 -->
+  <view class="modal-overlay" wx:if="{{showEditModal}}" bindtap="onCloseEditModal">
+    <view class="modal-content" catchtap="onModalContentTap">
+      <view class="modal-header">
+        <text class="modal-title">编辑牧场信息</text>
+      </view>
+
+      <view class="modal-body">
+        <view class="form-item">
+          <view class="form-item-label">牧场名称</view>
+          <input
+            class="form-item-input"
+            type="text"
+            value="{{editFormData.farmName}}"
+            placeholder="请输入牧场名称"
+            bindinput="onEditInputChange"
+            data-field="farmName"
+          />
+        </view>
+
+        <view class="form-item">
+          <view class="form-item-label">站号</view>
+          <input
+            class="form-item-input"
+            type="text"
+            value="{{editFormData.farmCode}}"
+            placeholder="请输入站号"
+            bindinput="onEditInputChange"
+            data-field="farmCode"
+            disabled
+          />
+          <view class="form-item-hint">站号不可修改</view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-item-label">DHI编号</view>
+          <input
+            class="form-item-input"
+            type="text"
+            value="{{editFormData.dhiCode}}"
+            placeholder="请输入DHI编号（可选）"
+            bindinput="onEditInputChange"
+            data-field="dhiCode"
+          />
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCloseEditModal">取消</button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onConfirmEdit">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 鉴定员编辑弹窗 -->
+  <view class="modal-overlay" wx:if="{{showAppraiserModal}}" bindtap="onCloseAppraiserModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">{{appraiserFormData.employeeId ? '编辑鉴定员' : '添加鉴定员'}}</text>
+      </view>
+
+      <view class="modal-body">
+        <view class="form-item">
+          <view class="form-item-label">工号</view>
+          <input
+            class="form-item-input"
+            type="text"
+            value="{{appraiserFormData.employeeId}}"
+            placeholder="请输入工号"
+            bindinput="onAppraiserInputChange"
+            data-field="employeeId"
+            disabled="{{appraiserFormData.isEdit}}"
+          />
+          <view class="form-item-hint" wx:if="{{appraiserFormData.isEdit}}">工号不可修改</view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-item-label">姓名</view>
+          <input
+            class="form-item-input"
+            type="text"
+            value="{{appraiserFormData.appraiserName}}"
+            placeholder="请输入姓名"
+            bindinput="onAppraiserInputChange"
+            data-field="appraiserName"
+          />
+        </view>
+
+        <view class="form-item">
+          <view class="form-item-label">管理员级别</view>
+          <picker
+            mode="selector"
+            range="{{roleOptions}}"
+            range-key="label"
+            value="{{appraiserFormData.roleIndex}}"
+            bindchange="onRoleChange"
+            disabled="{{appraiserFormData.employeeId === '10075345'}}"
+          >
+            <view class="form-item-picker">
+              <text>{{appraiserFormData.roleLabel}}</text>
+              <text class="arrow">›</text>
+            </view>
+          </picker>
+          <view class="form-item-hint" wx:if="{{appraiserFormData.employeeId === '10075345'}}">超级管理员级别不可修改</view>
+        </view>
+
+        <view class="form-item">
+          <view class="form-item-label">认证状态</view>
+          <picker
+            mode="selector"
+            range="{{certOptions}}"
+            range-key="label"
+            value="{{appraiserFormData.isCertified ? 0 : 1}}"
+            bindchange="onCertChange"
+          >
+            <view class="form-item-picker">
+              <text>{{appraiserFormData.isCertified ? '奶协认证鉴定员' : '未认证鉴定员'}}</text>
+              <text class="arrow">›</text>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCloseAppraiserModal">取消</button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onConfirmAppraiser">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 证书审批 Tab -->
+  <view class="tab-content" wx:if="{{activeTab === 'certReview'}}">
+    <view class="pending-certs-list">
+      <view class="cert-application-card card"
+            wx:for="{{pendingApplications}}"
+            wx:key="id">
+        <!-- 鉴定员信息 -->
+        <view class="appraiser-header">
+          <view class="appraiser-info">
+            <text class="name">{{item.appraiserName}}</text>
+            <text class="employee-id">工号: {{item.employeeId}}</text>
+          </view>
+          <text class="upload-time">{{item.uploadedAt}}</text>
+        </view>
+
+        <!-- 证书图片 -->
+        <image
+          class="cert-preview"
+          src="{{item.ossUrl}}"
+          mode="aspectFit"
+          bindtap="onPreviewCert"
+          data-url="{{item.ossUrl}}"
+        />
+
+        <!-- 操作按钮 -->
+        <view class="cert-actions">
+          <button
+            class="btn-approve"
+            bindtap="onApproveCert"
+            data-application-id="{{item.id}}">
+            通过
+          </button>
+          <button
+            class="btn-reject"
+            bindtap="onRejectCert"
+            data-application-id="{{item.id}}">
+            拒绝
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{pendingApplications.length === 0}}">
+      <text class="empty-icon">📜</text>
+      <text class="empty-text">暂无待审批证书</text>
+    </view>
+  </view>
+
+  <!-- 拒绝原因弹窗 -->
+  <view class="modal-overlay" wx:if="{{showRejectModal}}" bindtap="onCloseRejectModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">拒绝原因</text>
+      </view>
+      <view class="modal-body">
+        <textarea
+          class="reject-textarea"
+          placeholder="请输入拒绝原因（必填）"
+          maxlength="200"
+          value="{{rejectReason}}"
+          bindinput="onRejectReasonInput"
+        />
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn modal-btn-cancel" bindtap="onCloseRejectModal">
+          取消
+        </button>
+        <button class="modal-btn modal-btn-confirm" bindtap="onConfirmReject">
+          确认拒绝
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

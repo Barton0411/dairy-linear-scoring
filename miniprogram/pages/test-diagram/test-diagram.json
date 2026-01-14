@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "测试示意图",
+  "usingComponents": {
+    "nav-header": "/components/nav-header/nav-header",
+    "trait-diagram": "/components/trait-diagram/trait-diagram"
+  }
+}

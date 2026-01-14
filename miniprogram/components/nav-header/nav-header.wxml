@@ -1,0 +1,10 @@
+<!-- 全局导航栏组件 - 伊利logo返回主页 -->
+<view class="nav-header">
+  <image
+    class="home-logo"
+    src="/img/yili-logo.png"
+    mode="aspectFit"
+    bindtap="onGoHome"
+  />
+  <view class="nav-title">{{title}}</view>
+</view>

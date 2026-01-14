@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "评分",
+  "disableScroll": false,
+  "usingComponents": {
+    "trait-diagram": "/components/trait-diagram/trait-diagram",
+    "nav-header": "/components/nav-header/nav-header"
+  }
+}

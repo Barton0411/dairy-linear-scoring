@@ -1,0 +1,45 @@
+<!--pages/login/login.wxml-->
+<nav-header title="登录" />
+<view class="container">
+  <view class="hero">
+    <text class="hero-title">伊利奶牛体型外貌鉴定系统</text>
+    <text class="hero-subtitle">专业的奶牛体型评分工具</text>
+  </view>
+
+  <view class="actions">
+    <button
+      class="btn-login"
+      open-type="chooseAvatar"
+      bindchooseavatar="onChooseAvatar"
+      disabled="{{loading || !agreed}}"
+    >
+      登录认证
+    </button>
+
+    <button class="btn-preview" bindtap="onPreview">
+      游客模式
+    </button>
+
+    <view class="agreement-card">
+      <checkbox-group bindchange="onAgreeChange">
+        <label class="agreement-row">
+          <checkbox value="agreed" checked="{{agreed}}" color="#0087CD" />
+          <view class="agreement-text">
+            <text>我已阅读并同意</text>
+            <text class="link" bindtap="onViewAgreement" catchtap="onViewAgreement">《用户协议》</text>
+            <text>和</text>
+            <text class="link" bindtap="onViewPrivacy" catchtap="onViewPrivacy">《隐私政策》</text>
+          </view>
+        </label>
+      </checkbox-group>
+    </view>
+  </view>
+
+  <view class="footer safe-bottom">
+    <view class="brand-block">
+      <image class="brand-logo" src="/assets/brand/yili-logo.png" mode="aspectFit" />
+      <text class="brand-team">开发团队：伊利奶科院育种中心</text>
+    </view>
+    <text class="footer-text">首次登录将自动创建账号</text>
+  </view>
+</view>

@@ -1,0 +1,47 @@
+.container {
+  min-height: 100vh;
+  background: transparent;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.scroll {
+  height: calc(100vh - 40rpx);
+}
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 16rpx;
+  box-shadow: none;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.meta {
+  font-size: 24rpx;
+  color: #5f6464;
+  display: block;
+}
+
+.h {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1c1c1e;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.p {
+  font-size: 28rpx;
+  color: #1c1c1e;
+  line-height: 1.7;
+  display: block;
+}
