@@ -136,7 +136,7 @@ Page({
   async submitScore() {
     // 验证分数完整性
     if (!this.validateScores()) {
-      return { success: false, isOffline: false }
+      return { success: false, isOffline: false, validationFailed: true }
     }
 
     const { currentScoring, currentFarm, userInfo, totalScore } = this.data
@@ -157,6 +157,10 @@ Page({
               cancelText: '新增',
               success: (res) => {
                 resolve({ confirmed: res.confirm, cancelled: res.cancel })
+              },
+              fail: () => {
+                // 弹窗失败时默认新增
+                resolve({ confirmed: false, cancelled: true })
               }
             })
           })
@@ -277,6 +281,11 @@ Page({
           this.resetScoring()
           wx.redirectTo({ url: '/pages/scoring/info/info' })
         }, 500)
+      } else if (result.validationFailed) {
+        // 验证失败，validateScores 已经显示了具体缺失项
+        // 不需要额外提示
+      } else {
+        showError('提交失败，请重试')
       }
     } catch (err) {
       hideLoading()
@@ -310,6 +319,10 @@ Page({
           this.resetScoring()
           wx.switchTab({ url: '/pages/index/index' })
         }, 500)
+      } else if (result.validationFailed) {
+        // 验证失败，validateScores 已经显示了具体缺失项
+      } else {
+        showError('提交失败，请重试')
       }
     } catch (err) {
       hideLoading()
@@ -343,6 +356,10 @@ Page({
           this.resetScoring()
           wx.switchTab({ url: '/pages/records/list/list' })
         }, 500)
+      } else if (result.validationFailed) {
+        // 验证失败，validateScores 已经显示了具体缺失项
+      } else {
+        showError('提交失败，请重试')
       }
     } catch (err) {
       hideLoading()
